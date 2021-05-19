@@ -52,5 +52,6 @@ CREATE TABLE test (
     imperative_tps VARCHAR(100),
     imperative_fpp VARCHAR(100),
     imperative_spp VARCHAR(100),
-    imperative_tpp VARCHAR(100)
+    imperative_tpp VARCHAR(100),
+    verb_group VARCHAR(100)
 );

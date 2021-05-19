@@ -35,6 +35,26 @@ app.get('/conjugation', (req, res) => {
     })
 })
 
+function getRandomVerbQuery(group) {
+    const verbGroup = getVerbGroup(group);
+
+    return `SELECT * 
+            FROM test 
+            WHERE verb_group="${verbGroup}"
+            ORDER BY RAND()
+            LIMIT 1`;
+}
+
+function getVerbGroup(group) {
+    const allowedGroups = ['er', 'ir', 'irregular-ir', 'irregular-re', 'irregular-oir'];
+
+    if (!allowedGroups.includes(group)) {
+        throw new Error('Bad group');
+    }
+
+    return group;
+}
+
 function buildConjugationQuery(mood, tense, pronoun, infinitive) {
     const pronounType = getPronounType(pronoun);
     const column = mood + "_" + tense + "_" + pronounType;

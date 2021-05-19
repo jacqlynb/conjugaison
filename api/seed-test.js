@@ -1,5 +1,6 @@
 const fs = require('fs');
 const mysql = require('mysql');
+const thirdGroupVerbs = require('./irregularIRVerbs.js');
 
 const connection = mysql.createConnection({
     host     : 'localhost',
@@ -28,6 +29,8 @@ const seed = (connection) => {
             if (value === ',,') return (', ,');
             else return (', ');
         });
+        const infinitive = line.split(',')[0];
+        const verbGroup = getVerbGroup(infinitive);
         const formattedLine = line.split(',').map(value => '"' + value + '"').join(",");
 
         connection.query(`INSERT INTO test(
@@ -83,14 +86,39 @@ const seed = (connection) => {
             imperative_tps,
             imperative_fpp,
             imperative_spp,
-            imperative_tpp
+            imperative_tpp,
+            verb_group
         )
-        VALUES(${formattedLine})`, (error, results) => {
+        VALUES(
+            ${formattedLine}, "${verbGroup}"
+        )`, (error, results) => {
             if (error) {
                 throw error;
             }
-            console.log(results);
         });
     });
     console.log('finished seeding');
 };
+
+function getVerbGroup(infinitive) {
+    if (/.+er$/.test(infinitive)) {
+        return (infinitive === 'aller') ? 'irregular-er' : 'er';
+    } 
+    if (/.+oir$/.test(infinitive)) {
+        return 'irregular-oir';
+    }
+    if (/.+ir$/.test(infinitive)) {
+        return (thirdGroupVerbs.irregularIRVerbs.includes(infinitive))
+                ? 'irregular-ir'
+                : 'ir';
+    }
+    if (/.+ïr/.test(infinitive)) {
+        return 'irregular ir';
+    }
+    if (/.+re$/.test(infinitive)) {
+        return 'irregular-re';
+    } else {
+        return null;
+    }
+}
+
