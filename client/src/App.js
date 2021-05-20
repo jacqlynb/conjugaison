@@ -4,10 +4,12 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
+    this.handleVerbGroupChange = this.handleVerbGroupChange.bind(this);
     this.fetchRandomVerb = this.fetchRandomVerb.bind(this);
+    this.getRandomVerbUrl = this.getRandomVerbUrl.bind(this);
     this.getRandomPronoun = this.getRandomPronoun.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleConjugationChange = this.handleConjugationChange.bind(this);
     this.fetchCorrectConjugation = this.fetchCorrectConjugation.bind(this);
     this.next = this.next.bind(this);
   }
@@ -15,20 +17,28 @@ class App extends Component {
   state = {
     mood: 'indicative',
     tense: 'present',
+    verbGroup: 'er',
     pronoun: '',
     infinitive: '',
     userConjugation: '',
-    correctConjugation: '',
-    conjugationValidation: ''
+    correctResponse: '',
+    conjugationValidation: '',
+    correctConjugations: [],
+    incorrectConjugations: []
   };
 
   componentDidMount() {
     this.next();
   }
 
+  handleVerbGroupChange(event) {
+    this.setState({verbGroup: event.target.value}, this.next);
+  }
+
   async fetchRandomVerb() {
+    const url = this.getRandomVerbUrl("http://localhost:8080/verb");
     try {
-      const data = await fetch('/verb');
+      const data = await fetch(url);
       const verb = await data.json();
       return verb.infinitive;
     } catch (error) {
@@ -36,20 +46,15 @@ class App extends Component {
     }
   }
 
-  async fetchCorrectConjugation() {
-    try {
-      let url = this.getConjugationUrl('http://localhost:8080/conjugation')
-      const data = await fetch(url);
-      const body = await data.text();
-      const verb = JSON.parse(body);
-      this.setState({correctConjugation: verb.conjugation});
-    } catch (error) {
-      console.log('error in callApi', error);
-    }
+  getRandomVerbUrl(base) {
+    const url = new URL(base);
+    const params = {group: this.state.verbGroup};
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    return url;
   }
 
   getConjugationUrl(base) {
-    let url = new URL(base), params = {
+    const url = new URL(base), params = {
       mood: this.state.mood,
       tense: this.state.tense, 
       pronoun: this.state.pronoun, 
@@ -70,7 +75,7 @@ class App extends Component {
     }
   }
 
-  handleChange(event) {
+  handleConjugationChange(event) {
     event.preventDefault();
     this.setState({userConjugation: event.target.value});
   }
@@ -80,16 +85,45 @@ class App extends Component {
     const userConjugation = event.target.elements.conjugation.value;
     this.setState({userConjugation});
     this.fetchCorrectConjugation().then(() => {
-      if (this.state.correctConjugation !== '') {
-        this.setState({conjugationValidation: (userConjugation === this.state.correctConjugation)
-          ? 'correct'
-          : 'incorrect'
-        });
+      if (this.state.correctResponse !== '') {
+        this.validateConjugation();
         setTimeout(this.next, 1500);
       }
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  async fetchCorrectConjugation() {
+    try {
+      let url = this.getConjugationUrl('http://localhost:8080/conjugation')
+      const data = await fetch(url);
+      const body = await data.text();
+      const verb = JSON.parse(body);
+      this.setState({correctResponse: verb.conjugation});
+    } catch (error) {
+      console.log('error in callApi', error);
+    }
+  }
+
+  validateConjugation() {
+    if (this.state.userConjugation === this.state.correctResponse) {
+      let correctConjugations = [...this.state.correctConjugations];
+      correctConjugations.push(this.state.infinitive);
+
+      this.setState({
+        conjugationValidation: 'correct',
+        correctConjugations
+      })
+    } else {
+      let incorrectConjugations = [...this.state.incorrectConjugations];
+      incorrectConjugations.push(this.state.infinitive);
+      
+      this.setState({
+        conjugationValidation: 'incorrect',
+        incorrectConjugations
+      })
+    }
   }
 
   next() {
@@ -108,18 +142,61 @@ class App extends Component {
   }
 
   render() {
+    const verbGroupForm = (
+      <div className="verb-group">
+        <p>Verb Group:</p>
+        <input type="radio" 
+               id="er" 
+               name="verb-group" 
+               value="er" 
+               defaultChecked
+               onChange={this.handleVerbGroupChange} />
+        <label htmlFor="er">-er</label>
+        <input type="radio" 
+               id="ir" 
+               name="verb-group"
+               value="ir"
+               onChange={this.handleVerbGroupChange} />
+        <label htmlFor="ir">-ir</label>
+        <input type="radio" 
+               id="irregular" 
+               name="verb-group" 
+               value="irregular"
+               onChange={this.handleVerbGroupChange} />
+        <label htmlFor="irregular">irregular</label>
+      </div>
+    );
+
+    const prompt = (
+      <p>
+        {this.state.pronoun} 
+        {this.state.infinitive === '' ? <span>&nbsp;</span> : ` (${this.state.infinitive})`}
+      </p>
+    );
+
+    const conjugationForm = (
+      <form onSubmit={this.handleSubmit}>
+        <input
+          type="text" name="conjugation"
+          onChange={this.handleConjugationChange}
+          value={this.state.userConjugation}
+          className={this.state.conjugationValidation}
+        />
+        <input type="submit" value="Check" />
+      </form>
+    );
+
+    const tally = (
+      <p>{this.state.correctConjugations.length}/
+         {this.state.correctConjugations.length + this.state.incorrectConjugations.length}</p>
+    );
+
     return(
       <div>
-        <p>{this.state.pronoun} {this.state.infinitive === '' ? <span>&nbsp;</span> : `(${this.state.infinitive})`}</p>
-        <form onSubmit={this.handleSubmit}>
-            <input
-              type="text" name="conjugation"
-              onChange={this.handleChange}
-              value={this.state.userConjugation}
-              className={this.state.conjugationValidation}
-            />
-            <input type="submit" value="Check" />
-          </form>
+        {verbGroupForm}
+        {prompt}
+        {conjugationForm}
+        {tally}
       </div>
     )
   } 

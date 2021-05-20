@@ -16,10 +16,8 @@ const connection = mysql.createConnection({
 });
 
 app.get('/verb', (req, res) => {
-    const q = `SELECT * 
-               FROM test 
-               ORDER BY RAND() 
-               LIMIT 1`;
+    const {group} = req.query;
+    const q = getRandomVerbQuery(group);
     connection.query(q, (error, results) => {
         if (error) throw error;
         res.json(results[0]);
@@ -78,3 +76,7 @@ function getPronounType(pronoun) {
 }
 
 app.listen(port, () => console.log(`listening on port ${port}`));
+
+module.exports = {
+    app
+}
