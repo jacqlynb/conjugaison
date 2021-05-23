@@ -36,7 +36,7 @@ app.get('/conjugation', (req, res) => {
 function getRandomVerbQuery(group) {
     const verbGroup = getVerbGroup(group);
 
-    return `SELECT * 
+    return `SELECT infinitive 
             FROM test 
             WHERE verb_group="${verbGroup}"
             ORDER BY RAND()
