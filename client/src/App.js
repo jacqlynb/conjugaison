@@ -82,8 +82,7 @@ class App extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const userConjugation = event.target.elements.conjugation.value;
-    this.setState({userConjugation});
+    this.setState({userConjugation: event.target.elements.conjugation.value});
     this.fetchCorrectConjugation().then(() => {
       if (this.state.correctResponse !== '') {
         this.validateConjugation();
@@ -98,8 +97,7 @@ class App extends Component {
     try {
       let url = this.getConjugationUrl('http://localhost:8080/conjugation')
       const data = await fetch(url);
-      const body = await data.text();
-      const verb = JSON.parse(body);
+      const verb = await data.json();
       this.setState({correctResponse: verb.conjugation});
     } catch (error) {
       console.log('error in callApi', error);
@@ -142,28 +140,29 @@ class App extends Component {
   }
 
   render() {
+    const verbGroups = ['er', 'ir', 'irregular-ir', 'irregular-re', 'irregular-oir'];
+    const verbGroupMarkup = verbGroups.map(verbGroup => {
+      return (
+        <div key={'verb-group-' + verbGroup}>
+          <input type="radio"
+                 id={verbGroup}
+                 name="verb-group" 
+                 value={verbGroup} 
+                 defaultChecked={verbGroup === 'er' ? true : false}
+                 onChange={this.handleVerbGroupChange} />
+          <label htmlFor="er">
+            {verbGroup.includes('irregular') 
+              ? verbGroup.replace('-', ' -') 
+              : verbGroup}
+          </label>
+        </div>
+      );
+    });
+
     const verbGroupForm = (
       <div className="verb-group">
         <p>Verb Group:</p>
-        <input type="radio" 
-               id="er" 
-               name="verb-group" 
-               value="er" 
-               defaultChecked
-               onChange={this.handleVerbGroupChange} />
-        <label htmlFor="er">-er</label>
-        <input type="radio" 
-               id="ir" 
-               name="verb-group"
-               value="ir"
-               onChange={this.handleVerbGroupChange} />
-        <label htmlFor="ir">-ir</label>
-        <input type="radio" 
-               id="irregular" 
-               name="verb-group" 
-               value="irregular"
-               onChange={this.handleVerbGroupChange} />
-        <label htmlFor="irregular">irregular</label>
+        {verbGroupMarkup}
       </div>
     );
 

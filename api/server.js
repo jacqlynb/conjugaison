@@ -16,7 +16,6 @@ const connection = mysql.createConnection({
   charset: 'utf8',
 });
 
-<<<<<<< HEAD
 app.get('/api/verb', (req, res) => {
   const { group } = req.query;
   const q = getRandomVerbQuery(group);
@@ -34,25 +33,6 @@ app.get('/api/conjugation', (req, res) => {
     res.json(results[0]);
   });
 });
-=======
-app.get('/verb', (req, res) => {
-    const {group} = req.query;
-    const q = getRandomVerbQuery(group);
-    connection.query(q, (error, results) => {
-        if (error) throw error;
-        res.json(results[0]);
-    });
-})
-
-app.get('/conjugation', (req, res) => {
-    const {mood, tense, pronoun, infinitive} = req.query;
-    const q = buildConjugationQuery(mood, tense, pronoun, infinitive);
-    connection.query(q, (error, results) => {
-        if (error) throw error;
-        res.json(results[0]);
-    })
-})
->>>>>>> b8b0544 (add verb group selection feature)
 
 function getRandomVerbQuery(group) {
   const verbGroup = getVerbGroup(group);
