@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {VerbGroupForm} from './components';
 import './App.css';
 
 class App extends Component {
@@ -140,41 +141,18 @@ class App extends Component {
   }
 
   render() {
-    const verbGroups = ['er', 'ir', 'irregular-ir', 'irregular-re', 'irregular-oir'];
-    const verbGroupMarkup = verbGroups.map(verbGroup => {
-      return (
-        <div key={'verb-group-' + verbGroup}>
-          <input type="radio"
-                 id={verbGroup}
-                 name="verb-group" 
-                 value={verbGroup} 
-                 defaultChecked={verbGroup === 'er' ? true : false}
-                 onChange={this.handleVerbGroupChange} />
-          <label htmlFor="er">
-            {verbGroup.includes('irregular') 
-              ? verbGroup.replace('-', ' -') 
-              : verbGroup}
-          </label>
-        </div>
-      );
-    });
-
-    const verbGroupForm = (
-      <div className="verb-group">
-        <p>Verb Group:</p>
-        {verbGroupMarkup}
+    const prompt = (
+      <div className="prompt">
+        <span className="pronoun">{this.state.pronoun}</span>
+        <span className="infinitive">{this.state.infinitive === '' 
+                                ? <span>&nbsp;</span> 
+                                : ` (${this.state.infinitive})`}
+        </span>
       </div>
     );
 
-    const prompt = (
-      <p>
-        {this.state.pronoun} 
-        {this.state.infinitive === '' ? <span>&nbsp;</span> : ` (${this.state.infinitive})`}
-      </p>
-    );
-
     const conjugationForm = (
-      <form onSubmit={this.handleSubmit}>
+      <form className="conjugation-form" onSubmit={this.handleSubmit}>
         <input
           type="text" name="conjugation"
           onChange={this.handleConjugationChange}
@@ -192,7 +170,7 @@ class App extends Component {
 
     return(
       <div>
-        {verbGroupForm}
+        <VerbGroupForm onSelect={this.handleVerbGroupChange} />
         {prompt}
         {conjugationForm}
         {tally}

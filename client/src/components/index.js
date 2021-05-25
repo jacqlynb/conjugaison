@@ -1,1 +1,1 @@
-export {FlashCardForm} from './FlashCardForm/FlashCardForm.js';
+export {VerbGroupForm} from './VerbGroupForm';
