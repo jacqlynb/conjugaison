@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const connection = mysql.createConnection({
+<<<<<<< HEAD
   host: 'localhost',
   user: 'root',
   password: 'password',
@@ -33,6 +34,32 @@ app.get('/api/conjugation', (req, res) => {
     res.json(results[0]);
   });
 });
+=======
+    host     : 'localhost',
+    user     : 'root',
+    password : 'Rhsnb321',
+    database : 'french',
+    charset: 'utf8'
+});
+
+app.get('/verb', (req, res) => {
+    const {group} = req.query;
+    const q = getRandomVerbQuery(group);
+    connection.query(q, (error, results) => {
+        if (error) throw error;
+        res.json(results[0]);
+    });
+})
+
+app.get('/conjugation', (req, res) => {
+    const {tense, pronoun, infinitive} = req.query;
+    const q = buildConjugationQuery(tense, pronoun, infinitive);
+    connection.query(q, (error, results) => {
+        if (error) throw error;
+        res.json(results[0]);
+    })
+})
+>>>>>>> 8a24855 (add support for all verb tenses)
 
 function getRandomVerbQuery(group) {
   const verbGroup = getVerbGroup(group);
@@ -175,6 +202,33 @@ function getComposedTenseQuery(auxilliaryTense, pronounType, infinitive) {
         AS conjugation
         FROM test 
         WHERE infinitive="${infinitive}";`;
+}
+
+function getSimpleTenseQuery(tense, pronounType, infinitive) {
+    const column = tense + "_" + pronounType;
+
+    return `SELECT ${column} 
+            AS conjugation 
+            FROM test 
+            WHERE infinitive="${infinitive}"`;
+}
+
+function getComposedTenseQuery(auxilliaryTense, pronounType, infinitive) {
+    return (
+        `SELECT CONCAT(
+            (
+                SELECT ${auxilliaryTense + '_' + pronounType}  
+                FROM test 
+                WHERE infinitive=(
+                    SELECT SUBSTRING_INDEX(compound_verb, ';', 1) 
+                    FROM test 
+                    WHERE infinitive="${infinitive}"
+                )
+            ), " ", past_participle) 
+        AS conjugation
+        FROM test 
+        WHERE infinitive="${infinitive}";`
+    );
 }
 
 app.listen(port, () => console.log(`listening on port ${port}`));
