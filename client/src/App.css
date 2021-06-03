@@ -2,10 +2,33 @@ body {
   text-align: center;
 }
 
+.container {
+  display: flex;
+  flex-direction:row;
+}
+
+.conjugation-prompt {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: .5rem;
+}
+
+.conjugation-input {
+  width: 150px;
+}
+
 .correct {
+  width: 150px;
   background-color: rgb(150, 253, 150);
 }
 
 .incorrect {
+  width: 150px;
   background-color: rgb(255, 116, 116);
+}
+
+.correct-response {
+  margin-top: 20px;
+  white-space: pre;
 }
