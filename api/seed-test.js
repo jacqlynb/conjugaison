@@ -13,8 +13,10 @@ connection.query('SELECT * FROM test', (error, results) => {
     if (results == null) {
         throw new Error('test table doesn\'t exist');
     }
-    if (results.length === 0) {
+    else if (results.length === 0) {
         seed(connection);
+        connection.end();
+    } else {
         connection.end();
     }
 });
