@@ -63,7 +63,7 @@ function buildConjugationQuery(tense, pronoun, infinitive) {
         case 'imparfait': 
             return getSimpleTenseQuery('indicative_imperfect', pronounType, infinitive);
         case 'passé simple': 
-            return getSimpleTenseQuery('past_historic', pronounType, infinitive);
+            return getSimpleTenseQuery('indicative_past_historic', pronounType, infinitive);
         case 'futur simple': 
             return getSimpleTenseQuery('indicative_future', pronounType, infinitive);
         case 'passé composé':
