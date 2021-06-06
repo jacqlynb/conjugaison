@@ -20,7 +20,7 @@ export function VerbTenseForm(props) {
              name={tense}
              value={tense}
              onChange={props.onSelectTense}
-             defaultChecked={(tense === 'indicatif présent') ? true : false} />
+             checked={(props.tenses.includes(tense)) ? true : false}/>
       <label htmlFor={tense}>{tense}</label>
       </div>
     );
