@@ -36,12 +36,13 @@ class App extends Component {
   handleVerbTenseChange(event) {
     const tenses = [...this.state.tenses];
 
-    if (tenses.includes(event.target.value)) {
+    if (tenses.includes(event.target.value) && tenses.length !== 1) {
       tenses.splice(tenses.indexOf(event.target.value), 1);
-    } else {
+    } else if (!tenses.includes(event.target.value)){
       tenses.push(event.target.value);
     }
     
+    // verb prompt must not update if the current tense is still checked
     this.setState({tenses}, () => {
       if (!tenses.includes(this.state.currentTense)) this.next();
     });
@@ -206,7 +207,8 @@ class App extends Component {
     return(
       <div className="container">
         <div className="parameters">
-          <VerbTenseForm onSelectTense={this.handleVerbTenseChange} />
+          <VerbTenseForm onSelectTense={this.handleVerbTenseChange} 
+                         tenses={this.state.tenses} />
           <VerbGroupForm onSelect={this.handleVerbGroupChange} />
         </div>
         <div className="flashcard">
