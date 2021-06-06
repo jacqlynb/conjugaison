@@ -42,7 +42,9 @@ class App extends Component {
       tenses.push(event.target.value);
     }
     
-    this.setState({tenses}, this.next);
+    this.setState({tenses}, () => {
+      if (!tenses.includes(this.state.currentTense)) this.next();
+    });
   }
 
   handleVerbGroupChange(event) {
@@ -119,7 +121,6 @@ class App extends Component {
       let url = this.getConjugationUrl('http://localhost:8080/conjugation')
       const data = await fetch(url);
       const verb = await data.json();
-      console.log('conjugation', verb.conjugation);
 
       this.setState({correctConjugation: verb.conjugation});
     } catch (error) {
