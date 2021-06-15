@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {VerbTenseForm} from './components';
-import {VerbGroupForm} from './components';
+import {VerbTenseForm, VerbGroupForm, Prompt, ConjugationForm} from './components';
 import './App.css';
 
 class App extends Component {
@@ -22,6 +21,7 @@ class App extends Component {
     verbGroup: 'er',
     pronoun: '',
     infinitive: '',
+    currentTense: 'indicatif présent',
     userConjugation: '',
     correctConjugation: '',
     conjugationValidation: '',
@@ -44,7 +44,11 @@ class App extends Component {
     
     // verb prompt must not update if the current tense is still checked
     this.setState({tenses}, () => {
-      if (!tenses.includes(this.state.currentTense)) this.next();
+      if (!tenses.includes(this.state.currentTense)) {
+        console.log('next');
+        this.next();
+      }
+      console.log(tenses);
     });
   }
 
@@ -58,6 +62,7 @@ class App extends Component {
     try {
       const data = await fetch(url);
       const verb = await data.json();
+      console.log(verb);
       return verb.infinitive;
     } catch (error) {
       console.log('error in callApi', error);
@@ -166,16 +171,6 @@ class App extends Component {
   }
 
   render() {
-    const prompt = (
-      <div className="prompt">
-        <p>{this.state.currentTense}</p>
-        <span className="infinitive">{this.state.infinitive === '' 
-                                ? <span>&nbsp;</span> 
-                                : ` (${this.state.infinitive})`}
-        </span>
-      </div>
-    );
-
     const conjugationForm = (
       <form onSubmit={this.handleSubmit}>
         <div className="conjugation-prompt">
@@ -208,12 +203,18 @@ class App extends Component {
       <div className="container">
         <div className="parameters">
           <VerbTenseForm onSelectTense={this.handleVerbTenseChange} 
-                         tenses={this.state.tenses} />
-          <VerbGroupForm onSelect={this.handleVerbGroupChange} />
+                         selectedTenses={this.state.tenses} />
+          <VerbGroupForm onSelect={this.handleVerbGroupChange}
+                         verbGroup={this.state.verbGroup} />
         </div>
         <div className="flashcard">
-          {prompt}
-          {conjugationForm}
+          <Prompt currentTense={this.state.currentTense}
+                  infinitive={this.state.infinitive} />
+          <ConjugationForm onSubmit={this.handleSubmit}
+                           pronoun={this.state.pronoun}
+                           onChange={this.handleConjugationChange}
+                           value={this.state.userConjugation}
+                           classNameProp={this.state.conjugationValidation} />
           {correctResponse}
           {tally}
         </div>
