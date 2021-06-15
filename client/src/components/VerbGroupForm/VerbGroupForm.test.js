@@ -3,7 +3,7 @@ import {mount} from 'enzyme';
 import {VerbGroupForm} from './VerbGroupForm';
 
 describe('VerbGroupForm', () => {
-    it("renders verb group labels", () => {
+    it('renders verb group labels', () => {
         const verbGroupLabels = ['« er »', 
                                '« ir »', 
                                'irrégulier « ir »', 
@@ -15,7 +15,7 @@ describe('VerbGroupForm', () => {
         });
     });
 
-    it("selects 'er' group by default", () => {
+    it('selects \'er\' group by default', () => {
         const wrapper = mount(<VerbGroupForm />);
         expect(wrapper.find('input').filterWhere(input => {
             return input.props().value === 'er'
