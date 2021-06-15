@@ -10,7 +10,7 @@ export function VerbGroupForm(props) {
                id={verbGroup}
                name="verb-group"
                value={verbGroup}
-               defaultChecked={verbGroup === 'er' ? true : false}
+               checked={(props.verbGroup === verbGroup) ? true : false}
                onChange={props.onSelect} />
         <label htmlFor={verbGroup}>
             {verbGroup.includes('irregular')
