@@ -11,7 +11,7 @@ export function VerbGroupForm(props) {
                name="verb-group"
                value={verbGroup}
                checked={(props.verbGroup === verbGroup) ? true : false}
-               onChange={props.onSelect} />
+               onChange={props.onSelectGroup} />
         <label htmlFor={verbGroup}>
             {verbGroup.includes('irregular')
               ? verbGroup.replace('irregular-', 'irrégulier « ') + ' »'

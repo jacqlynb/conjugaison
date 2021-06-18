@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {VerbTenseForm, VerbGroupForm, Prompt, ConjugationForm} from './components';
+import {LandingPage, FlashCard} from './pages';
 import './App.css';
 
 class App extends Component {
@@ -171,53 +171,22 @@ class App extends Component {
   }
 
   render() {
-    const conjugationForm = (
-      <form onSubmit={this.handleSubmit}>
-        <div className="conjugation-prompt">
-          <label className="conjugation-label">{this.state.pronoun}</label>
-          <input
-            type="text" name="conjugation"
-            onChange={this.handleConjugationChange}
-            value={this.state.userConjugation}
-            className={this.state.conjugationValidation}
-          />
-          <input className="conjugation-submit" type="submit" value="Check" />
-        </div>
-      </form>
-    );
-
-    const correctResponse = (
-      <div className="correct-response">
-        {(this.state.correctConjugation !== '') 
-                 ? this.state.correctConjugation
-                 : ' ' }
-      </div>
-    )
-
-    const tally = (
-      <p>{this.state.correctConjugations.length}/
-         {this.state.correctConjugations.length + this.state.incorrectConjugations.length}</p>
-    );
-
     return(
       <div className="container">
-        <div className="parameters">
-          <VerbTenseForm onSelectTense={this.handleVerbTenseChange} 
-                         selectedTenses={this.state.tenses} />
-          <VerbGroupForm onSelect={this.handleVerbGroupChange}
-                         verbGroup={this.state.verbGroup} />
-        </div>
-        <div className="flashcard">
-          <Prompt currentTense={this.state.currentTense}
-                  infinitive={this.state.infinitive} />
-          <ConjugationForm onSubmit={this.handleSubmit}
-                           pronoun={this.state.pronoun}
-                           onChange={this.handleConjugationChange}
-                           value={this.state.userConjugation}
-                           classNameProp={this.state.conjugationValidation} />
-          {correctResponse}
-          {tally}
-        </div>
+        <LandingPage onSelectTense={this.handleVerbTenseChange}
+                     selectedTenses={this.state.tenses}
+                     onSelectGroup={this.handleVerbGroupChange}
+                     verbGroup={this.state.verbGroup} />
+        <FlashCard currentTense={this.state.currentTense}
+                   infinitive={this.state.infinitive}
+                   pronoun={this.state.pronoun}
+                   value={this.state.userConjugation}
+                   onChange={this.handleConjugationChange}
+                   onSubmit={this.handleSubmit}
+                   correctConjugation={this.state.correctConjugation}
+                   numCorrectConjugations={this.state.correctConjugations.length}
+                   numIncorrectConjugations={this.state.incorrectConjugations.length}
+                   classNameProp={this.state.conjugationValidation} />
       </div>
     )
   } 
