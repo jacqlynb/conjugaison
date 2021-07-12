@@ -1,4 +1,9 @@
 import React, {Component} from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 import {LandingPage, FlashCard} from './pages';
 import './App.css';
 
@@ -24,7 +29,7 @@ class App extends Component {
     currentTense: 'indicatif présent',
     userConjugation: '',
     correctConjugation: '',
-    conjugationValidation: '',
+    correct: null,
     correctConjugations: [],
     incorrectConjugations: []
   };
@@ -45,10 +50,8 @@ class App extends Component {
     // verb prompt must not update if the current tense is still checked
     this.setState({tenses}, () => {
       if (!tenses.includes(this.state.currentTense)) {
-        console.log('next');
         this.next();
       }
-      console.log(tenses);
     });
   }
 
@@ -62,7 +65,6 @@ class App extends Component {
     try {
       const data = await fetch(url);
       const verb = await data.json();
-      console.log(verb);
       return verb.infinitive;
     } catch (error) {
       console.log('error in callApi', error);
@@ -103,7 +105,6 @@ class App extends Component {
 
   handleConjugationChange(event) {
     event.preventDefault();
-
     this.setState({userConjugation: event.target.value});
   }
 
@@ -140,7 +141,7 @@ class App extends Component {
       correctConjugations.push(this.state.infinitive);
 
       this.setState({
-        conjugationValidation: 'correct',
+        correct: true,
         correctConjugations
       })
     } else {
@@ -148,7 +149,7 @@ class App extends Component {
       incorrectConjugations.push(this.state.infinitive);
       
       this.setState({
-        conjugationValidation: 'incorrect',
+        correct: false,
         incorrectConjugations
       })
     }
@@ -163,7 +164,7 @@ class App extends Component {
         currentTense: this.state.tenses[Math.floor(Math.random() * this.state.tenses.length)],
         userConjugation: '',
         correctConjugation: '',
-        conjugationValidation: '',
+        correct: null,
       });
     }).catch((error) => {
       console.log(error);
@@ -172,22 +173,30 @@ class App extends Component {
 
   render() {
     return(
-      <div className="container">
-        <LandingPage onSelectTense={this.handleVerbTenseChange}
-                     selectedTenses={this.state.tenses}
-                     onSelectGroup={this.handleVerbGroupChange}
-                     verbGroup={this.state.verbGroup} />
-        <FlashCard currentTense={this.state.currentTense}
-                   infinitive={this.state.infinitive}
-                   pronoun={this.state.pronoun}
-                   value={this.state.userConjugation}
-                   onChange={this.handleConjugationChange}
-                   onSubmit={this.handleSubmit}
-                   correctConjugation={this.state.correctConjugation}
-                   numCorrectConjugations={this.state.correctConjugations.length}
-                   numIncorrectConjugations={this.state.incorrectConjugations.length}
-                   classNameProp={this.state.conjugationValidation} />
-      </div>
+      <Router>
+        <div>
+        <Switch>
+          <Route exact path="/">
+            <LandingPage onSelectTense={this.handleVerbTenseChange}
+                         selectedTenses={this.state.tenses}
+                         onSelectGroup={this.handleVerbGroupChange}
+                         verbGroup={this.state.verbGroup} />
+          </Route>
+          <Route path="/flashcard">
+            <FlashCard currentTense={this.state.currentTense}
+                       infinitive={this.state.infinitive}
+                       pronoun={this.state.pronoun}
+                       value={this.state.userConjugation}
+                       onChange={this.handleConjugationChange}
+                       onSubmit={this.handleSubmit}
+                       correctConjugation={this.state.correctConjugation}
+                       numCorrectConjugations={this.state.correctConjugations.length}
+                       numIncorrectConjugations={this.state.incorrectConjugations.length}
+                       correct={this.state.correct} />
+          </Route>
+        </Switch> 
+        </div>
+      </Router>
     )
   } 
 }
