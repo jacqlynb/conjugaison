@@ -1,5 +1,6 @@
 import React from 'react';
 import {Prompt, ConjugationForm} from './components'
+import './FlashCard.css'
 
 export function FlashCard(props) {
     const correctResponse = (
@@ -16,16 +17,20 @@ export function FlashCard(props) {
     );
 
     return (
-        <div className="flashcard">
-          <Prompt currentTense={props.currentTense}
-                  infinitive={props.infinitive} />
-          <ConjugationForm onSubmit={props.onSubmit}
-                           pronoun={props.pronoun}
-                           onChange={props.onChange}
-                           value={props.userConjugation}
-                           classNameProp={props.conjugationValidation} />
-          {correctResponse}
-          {tally}
+        <div className="flashcard-container">
+            <div className="flashcard">
+              <Prompt currentTense={props.currentTense}
+                      infinitive={props.infinitive} />
+              <ConjugationForm onSubmit={props.onSubmit}
+                               pronoun={props.pronoun}
+                               onChange={props.onChange}
+                               value={props.value}
+                               correct={props.correct}
+                            />
+            </div>
+            {correctResponse}
+            {tally}
         </div>
+        
     );
 }
