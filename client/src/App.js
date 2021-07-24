@@ -3,8 +3,9 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect
 } from "react-router-dom";
-import {LandingPage, FlashCard} from './pages';
+import {LandingPage, FlashCard, Summary} from './pages';
 import './App.css';
 
 class App extends Component {
@@ -30,8 +31,10 @@ class App extends Component {
     userConjugation: '',
     correctConjugation: '',
     correct: null,
+    conjugationHistory: new Map(),
     correctConjugations: [],
-    incorrectConjugations: []
+    incorrectConjugations: [],
+    totalConjugations: 0
   };
 
   componentDidMount() {
@@ -137,12 +140,15 @@ class App extends Component {
 
   validateConjugation() {
     if (this.state.userConjugation === this.state.correctConjugation) {
+      // use local/session storage for conjugation history???
+      this.state.conjugationHistory.set(this.state.infinitive, {})
       let correctConjugations = [...this.state.correctConjugations];
       correctConjugations.push(this.state.infinitive);
 
       this.setState({
         correct: true,
-        correctConjugations
+        correctConjugations,
+        totalConjugations: this.state.totalConjugations + 1
       })
     } else {
       let incorrectConjugations = [...this.state.incorrectConjugations];
@@ -150,7 +156,8 @@ class App extends Component {
       
       this.setState({
         correct: false,
-        incorrectConjugations
+        incorrectConjugations,
+        totalConjugations: this.state.totalConjugations + 1
       })
     }
   }
@@ -183,6 +190,7 @@ class App extends Component {
                          verbGroup={this.state.verbGroup} />
           </Route>
           <Route path="/flashcard">
+            {this.state.totalConjugations === 3 ? <Redirect to="/summary" /> : 
             <FlashCard currentTense={this.state.currentTense}
                        infinitive={this.state.infinitive}
                        pronoun={this.state.pronoun}
@@ -192,7 +200,11 @@ class App extends Component {
                        correctConjugation={this.state.correctConjugation}
                        numCorrectConjugations={this.state.correctConjugations.length}
                        numIncorrectConjugations={this.state.incorrectConjugations.length}
-                       correct={this.state.correct} />
+                       correct={this.state.correct} />}
+          </Route>
+          <Route path="/summary">
+            <Summary numCorrectConjugations={this.state.correctConjugations.length}
+                     totalConjugations={this.state.totalConjugations} />
           </Route>
         </Switch> 
         </div>
