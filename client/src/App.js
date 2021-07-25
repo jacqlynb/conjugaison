@@ -13,13 +13,14 @@ class App extends Component {
     super(props);
     this.handleVerbTenseChange = this.handleVerbTenseChange.bind(this);
     this.handleVerbGroupChange = this.handleVerbGroupChange.bind(this);
+    this.handleNumPromptsChange = this.handleNumPromptsChange.bind(this);
     this.fetchRandomVerb = this.fetchRandomVerb.bind(this);
     this.getRandomVerbUrl = this.getRandomVerbUrl.bind(this);
     this.getRandomPronoun = this.getRandomPronoun.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleConjugationChange = this.handleConjugationChange.bind(this);
     this.fetchCorrectConjugation = this.fetchCorrectConjugation.bind(this);
-    this.next = this.next.bind(this);
+    this.getPrompt = this.getPrompt.bind(this);
   }
 
   state = {
@@ -34,11 +35,12 @@ class App extends Component {
     conjugationHistory: new Map(),
     correctConjugations: [],
     incorrectConjugations: [],
+    numPrompts: 10,
     totalConjugations: 0
   };
 
   componentDidMount() {
-    this.next();
+    this.getPrompt();
   }
 
   handleVerbTenseChange(event) {
@@ -49,17 +51,14 @@ class App extends Component {
     } else if (!tenses.includes(event.target.value)){
       tenses.push(event.target.value);
     }
-    
-    // verb prompt must not update if the current tense is still checked
-    this.setState({tenses}, () => {
-      if (!tenses.includes(this.state.currentTense)) {
-        this.next();
-      }
-    });
   }
 
   handleVerbGroupChange(event) {
-    this.setState({verbGroup: event.target.value}, this.next);
+    this.setState({verbGroup: event.target.value});
+  }
+
+  handleNumPromptsChange(event) {
+    this.setState({numPrompts: event.target.value});
   }
 
   async fetchRandomVerb() {
@@ -83,7 +82,6 @@ class App extends Component {
   }
 
   getConjugationUrl(base) {
-
     const url = new URL(base), params = {
       tense: this.state.currentTense, 
       pronoun: this.state.pronoun, 
@@ -119,7 +117,7 @@ class App extends Component {
     this.fetchCorrectConjugation().then(() => {
       if (this.state.correctConjugation !== '') {
         this.validateConjugation();
-        setTimeout(this.next, 1500);
+        setTimeout(this.getPrompt, 1500);
       }
     }).catch((error) => {
       console.log(error);
@@ -145,34 +143,34 @@ class App extends Component {
       let correctConjugations = [...this.state.correctConjugations];
       correctConjugations.push(this.state.infinitive);
 
-      this.setState({
+      this.setState(prevState => ({
         correct: true,
         correctConjugations,
-        totalConjugations: this.state.totalConjugations + 1
-      })
+        totalConjugations: prevState.totalConjugations + 1
+      }))
     } else {
       let incorrectConjugations = [...this.state.incorrectConjugations];
       incorrectConjugations.push(this.state.infinitive);
       
-      this.setState({
+      this.setState(prevState => ({
         correct: false,
         incorrectConjugations,
-        totalConjugations: this.state.totalConjugations + 1
-      })
+        totalConjugations: prevState.totalConjugations + 1
+      }))
     }
   }
 
-  next() {
+  getPrompt() {
     const pronoun = this.getRandomPronoun();
     this.fetchRandomVerb().then((infinitive) => {
-      this.setState({
+      this.setState(prevState => ({
         pronoun,
         infinitive,
-        currentTense: this.state.tenses[Math.floor(Math.random() * this.state.tenses.length)],
+        currentTense: prevState.tenses[Math.floor(Math.random() * this.state.tenses.length)],
         userConjugation: '',
         correctConjugation: '',
         correct: null,
-      });
+      }));
     }).catch((error) => {
       console.log(error);
     });
@@ -187,10 +185,11 @@ class App extends Component {
             <LandingPage onSelectTense={this.handleVerbTenseChange}
                          selectedTenses={this.state.tenses}
                          onSelectGroup={this.handleVerbGroupChange}
+                         onSelectNumPrompts={this.handleNumPromptsChange}
                          verbGroup={this.state.verbGroup} />
           </Route>
           <Route path="/flashcard">
-            {this.state.totalConjugations === 3 ? <Redirect to="/summary" /> : 
+            {this.state.totalConjugations === this.state.numPrompts ? <Redirect to="/summary" /> : 
             <FlashCard currentTense={this.state.currentTense}
                        infinitive={this.state.infinitive}
                        pronoun={this.state.pronoun}
