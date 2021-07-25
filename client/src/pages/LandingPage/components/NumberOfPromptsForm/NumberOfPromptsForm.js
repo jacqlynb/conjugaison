@@ -6,7 +6,7 @@ export function NumberOfPromptsForm(props) {
     return (
         <div className="number-of-prompts">
             <label>Number to practice</label>
-            <input type="text" onChange={props.onSelectNumPrompts}/>
+            <input type="number" onChange={props.onSelectNumPrompts}/>
         </div>
     );
   };

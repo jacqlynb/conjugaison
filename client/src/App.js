@@ -5,7 +5,7 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-import {LandingPage, FlashCard, Summary} from './pages';
+import {LandingPage, FlashCard, Summary, Wizard} from './pages';
 import './App.css';
 
 class App extends Component {
@@ -24,6 +24,7 @@ class App extends Component {
   }
 
   state = {
+    wizardMode: false,
     tenses: ['indicatif présent'],
     verbGroup: 'er',
     pronoun: '',
@@ -51,6 +52,8 @@ class App extends Component {
     } else if (!tenses.includes(event.target.value)){
       tenses.push(event.target.value);
     }
+
+    this.setState({tenses});
   }
 
   handleVerbGroupChange(event) {
@@ -58,7 +61,7 @@ class App extends Component {
   }
 
   handleNumPromptsChange(event) {
-    this.setState({numPrompts: event.target.value});
+    this.setState({numPrompts: parseInt(event.target.value)});
   }
 
   async fetchRandomVerb() {
@@ -111,7 +114,6 @@ class App extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    
     this.setState({userConjugation: event.target.elements.conjugation.value});
 
     this.fetchCorrectConjugation().then(() => {
@@ -182,15 +184,22 @@ class App extends Component {
         <div>
         <Switch>
           <Route exact path="/">
-            <LandingPage onSelectTense={this.handleVerbTenseChange}
+            {(this.state.wizardMode)
+            ? <Wizard onSelectTense={this.handleVerbTenseChange}
+                    selectedTenses={this.state.tenses}
+                    onSelectGroup={this.handleVerbGroupChange}
+                    onSelectNumPrompts={this.handleNumPromptsChange}
+                    verbGroup={this.state.verbGroup} /> 
+            : <LandingPage onSelectTense={this.handleVerbTenseChange}
                          selectedTenses={this.state.tenses}
                          onSelectGroup={this.handleVerbGroupChange}
                          onSelectNumPrompts={this.handleNumPromptsChange}
-                         verbGroup={this.state.verbGroup} />
+                         verbGroup={this.state.verbGroup} />}
           </Route>
           <Route path="/flashcard">
-            {this.state.totalConjugations === this.state.numPrompts ? <Redirect to="/summary" /> : 
-            <FlashCard currentTense={this.state.currentTense}
+            {(this.state.totalConjugations === this.state.numPrompts)
+            ? <Redirect to="/summary" /> 
+            : <FlashCard currentTense={this.state.currentTense}
                        infinitive={this.state.infinitive}
                        pronoun={this.state.pronoun}
                        value={this.state.userConjugation}
