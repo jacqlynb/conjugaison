@@ -32,4 +32,4 @@ export function VerbTenseForm(props) {
       {verbTenseMarkup}
     </div>
   );
-};
+}

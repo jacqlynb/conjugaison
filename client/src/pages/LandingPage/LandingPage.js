@@ -6,13 +6,13 @@ export function LandingPage(props) {
     let {url} = useRouteMatch();
 
     return (
-        <div className="parameters">
+        <form className="parameters-form">
             <VerbTenseForm onSelectTense={props.onSelectTense} 
                              selectedTenses={props.selectedTenses} />
             <VerbGroupForm onSelectGroup={props.onSelectGroup}
                              verbGroup={props.verbGroup} />
             <NumberOfPromptsForm onSelectNumPrompts ={props.onSelectNumPrompts}/>
-            <button><Link to={`${url}flashcard`}>Commencez</Link></button>
-        </div>
+            <button type="submit"><Link to={`${url}flashcard`}>Commencez</Link></button>
+        </form>
     );
 }
