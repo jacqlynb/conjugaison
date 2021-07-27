@@ -6,7 +6,7 @@ import {
   Redirect
 } from "react-router-dom";
 import {LandingPage, FlashCard, Summary, Wizard} from './pages';
-import {Header} from './components';
+import {Header, Description} from './components';
 import './App.css';
 
 class App extends Component {
@@ -184,6 +184,7 @@ class App extends Component {
       <Router>
         <div>
         <Header/>
+        <Description/>
         <Switch>
           <Route exact path="/">
             {(this.state.wizardMode)
