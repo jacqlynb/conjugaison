@@ -1,0 +1,8 @@
+.custom-link-button {
+    text-decoration: none;
+    color: black;
+    border: 1px solid lightblue;
+    border-radius: 3px;
+    padding: 8px;
+    background-color: lightblue;
+}
