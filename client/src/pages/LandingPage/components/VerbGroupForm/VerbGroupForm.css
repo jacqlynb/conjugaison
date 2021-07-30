@@ -1,3 +1,17 @@
 .verb-group-form {
-    margin-bottom: 70px;
-  }
+  display: flex;
+  flex-direction: column;
+}
+
+.verb-group-form-container {
+  display: inline-block;
+}
+
+.verb-group-radio {
+  align-self: flex-start;
+  padding-top: 5px;
+}
+
+.verb-group-heading {
+  margin: 30 10 10 10;
+}
