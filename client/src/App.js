@@ -62,7 +62,18 @@ class App extends Component {
   }
 
   handleNumPromptsChange(event) {
-    this.setState({numPrompts: parseInt(event.target.value)});
+    const prevNumPrompts = this.state.numPrompts;
+    let newNumPrompts; 
+
+    if (event.target.value === '') {
+      newNumPrompts = 0;
+    } else {
+      newNumPrompts = (Number.isNaN(parseInt(event.target.value))) 
+        ? prevNumPrompts
+        : parseInt(event.target.value);
+    }
+    
+    this.setState({numPrompts: newNumPrompts});
   }
 
   async fetchRandomVerb() {
@@ -197,7 +208,8 @@ class App extends Component {
                          selectedTenses={this.state.tenses}
                          onSelectGroup={this.handleVerbGroupChange}
                          onSelectNumPrompts={this.handleNumPromptsChange}
-                         verbGroup={this.state.verbGroup} />}
+                         verbGroup={this.state.verbGroup}
+                         numPrompts={this.state.numPrompts} />}
           </Route>
           <Route path="/flashcard">
             {(this.state.totalConjugations === this.state.numPrompts)
