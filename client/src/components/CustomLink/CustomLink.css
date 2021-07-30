@@ -1,8 +1,14 @@
 .custom-link-button {
     text-decoration: none;
+    font-weight: bold;
     color: black;
     border: 1px solid lightblue;
     border-radius: 3px;
     padding: 8px;
     background-color: lightblue;
+}
+
+.custom-link-button--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

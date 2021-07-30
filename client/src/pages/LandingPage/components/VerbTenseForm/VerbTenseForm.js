@@ -12,9 +12,8 @@ export function VerbTenseForm(props) {
 
   const verbTenseMarkup = verbTenses.map(tense => {
     return(
-      <div className="verb-tense-checkbox" key={tense}>
+      <div className="verb-tense-form__input" key={tense}>
       <input type="checkbox"
-             className="verb-tense"
              id={tense}
              key={tense}
              name={tense}
@@ -28,7 +27,7 @@ export function VerbTenseForm(props) {
 
   return(
     <div className="verb-tense-form">
-      <h4>Temps:</h4>
+      <h4 className="verb-tense-form__heading">Temps:</h4>
       {verbTenseMarkup}
     </div>
   );

@@ -3,6 +3,8 @@ import './Description.css';
 
 export function Description(props) {
   return (
-    <p>An app for practicing French verb conjugations</p>
+    <p className="landing-page-description">
+      An app for practicing French verb conjugations
+    </p>
   );
 }
