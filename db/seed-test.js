@@ -1,6 +1,6 @@
 const fs = require('fs');
 const mysql = require('mysql');
-const thirdGroupVerbs = require('./irregularIRVerbs.js');
+const thirdGroupVerbs = require('../api/irregularIRVerbs.js');
 
 const connection = mysql.createConnection({
     host     : 'localhost',
