@@ -16,7 +16,7 @@ const connection = mysql.createConnection({
     charset: 'utf8'
 });
 
-app.get('/verb', (req, res) => {
+app.get('/api/verb', (req, res) => {
     const {group} = req.query;
     const q = getRandomVerbQuery(group);
     connection.query(q, (error, results) => {
@@ -25,7 +25,7 @@ app.get('/verb', (req, res) => {
     });
 })
 
-app.get('/conjugation', (req, res) => {
+app.get('/api/conjugation', (req, res) => {
     const {tense, pronoun, infinitive} = req.query;
     const q = buildConjugationQuery(tense, pronoun, infinitive);
     connection.query(q, (error, results) => {
