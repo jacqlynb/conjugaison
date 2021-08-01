@@ -72,12 +72,12 @@ class App extends Component {
         ? prevNumPrompts
         : parseInt(event.target.value);
     }
-    
+
     this.setState({numPrompts: newNumPrompts});
   }
 
   async fetchRandomVerb() {
-    const url = this.getRandomVerbUrl("http://localhost:8080/verb");
+    const url = this.getRandomVerbUrl("/api/verb");
 
     try {
       const data = await fetch(url);
@@ -88,16 +88,16 @@ class App extends Component {
     }
   }
 
-  getRandomVerbUrl(base) {
-    const url = new URL(base);
+  getRandomVerbUrl(path) {
+    const url = new URL(path, window.location.origin);
     const params = {group: this.state.verbGroup};
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     return url;
   }
 
-  getConjugationUrl(base) {
-    const url = new URL(base), params = {
+  getConjugationUrl(path) {
+    const url = new URL(path, window.location.origin), params = {
       tense: this.state.currentTense, 
       pronoun: this.state.pronoun, 
       infinitive: this.state.infinitive
@@ -140,7 +140,8 @@ class App extends Component {
 
   async fetchCorrectConjugation() {
     try {
-      let url = this.getConjugationUrl('http://localhost:8080/conjugation')
+      let url = this.getConjugationUrl('/api/conjugation');
+      console.log('url', url);
       const data = await fetch(url);
       const verb = await data.json();
 
