@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 export const ConjugationHistoryContext = React.createContext({
   records: [],
   addRecord: () => {},
+  clearRecords: () => {},
 });
 
 export function useConjugationHistory() {
