@@ -1,21 +1,23 @@
 import React from 'react';
-import {useRouteMatch} from 'react-router-dom';
-import {CustomPieChart} from './components';
-import {CustomLink} from '../../components';
+import {
+  getTotalCorrect,
+  getTotalConjugations,
+  useConjugationHistory,
+} from '../../utilities';
+import { CustomPieChart } from './components';
+import { CustomLink } from '../../components';
 import './Summary.css';
 
-export function Summary(props) {
-  let {url} = useRouteMatch();
+export function Summary() {
+  const { records } = useConjugationHistory();
 
   return (
     <div>
-      <p className="summary__message">Total correct conjugations:</p>
-      <CustomPieChart numCorrectConjugations={props.numCorrectConjugations}
-                      totalConjugations={props.totalConjugations}/>
-      <CustomLink url="/"
-                  route=""
-                  linkStyle="button" 
-                  text="Restart"/>
+      <CustomPieChart
+        summaryCorrect={getTotalCorrect(records)}
+        summaryTotalConjugations={getTotalConjugations(records)}
+      />
+      <CustomLink url="/" route="" linkStyle="button" text="Restart" />
     </div>
-  )
+  );
 }

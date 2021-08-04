@@ -10,6 +10,7 @@ app.use(cors());
 
 const connection = mysql.createConnection({
 <<<<<<< HEAD
+<<<<<<< HEAD
   host: 'localhost',
   user: 'root',
   password: 'password',
@@ -40,18 +41,26 @@ app.get('/api/conjugation', (req, res) => {
     password : 'Rhsnb321',
     database : 'french',
     charset: 'utf8'
+=======
+  host: 'localhost',
+  user: 'root',
+  password: 'Rhsnb321',
+  database: 'french',
+  charset: 'utf8',
+>>>>>>> f1ec849 (big refactor)
 });
 
 app.get('/api/verb', (req, res) => {
-    const {group} = req.query;
-    const q = getRandomVerbQuery(group);
-    connection.query(q, (error, results) => {
-        if (error) throw error;
-        res.json(results[0]);
-    });
-})
+  const { group } = req.query;
+  const q = getRandomVerbQuery(group);
+  connection.query(q, (error, results) => {
+    if (error) throw error;
+    res.json(results[0]);
+  });
+});
 
 app.get('/api/conjugation', (req, res) => {
+<<<<<<< HEAD
     const {tense, pronoun, infinitive} = req.query;
     const q = buildConjugationQuery(tense, pronoun, infinitive);
     connection.query(q, (error, results) => {
@@ -60,6 +69,15 @@ app.get('/api/conjugation', (req, res) => {
     })
 })
 >>>>>>> 8a24855 (add support for all verb tenses)
+=======
+  const { tense, pronoun, infinitive } = req.query;
+  const q = buildConjugationQuery(tense, pronoun, infinitive);
+  connection.query(q, (error, results) => {
+    if (error) throw error;
+    res.json(results[0]);
+  });
+});
+>>>>>>> f1ec849 (big refactor)
 
 function getRandomVerbQuery(group) {
   const verbGroup = getVerbGroup(group);
@@ -177,6 +195,7 @@ function getPronounType(pronoun) {
     default:
       throw new Error('invalid pronoun');
   }
+<<<<<<< HEAD
 }
 
 function getSimpleTenseQuery(tense, pronounType, infinitive) {
@@ -202,20 +221,21 @@ function getComposedTenseQuery(auxilliaryTense, pronounType, infinitive) {
         AS conjugation
         FROM test 
         WHERE infinitive="${infinitive}";`;
+=======
+>>>>>>> f1ec849 (big refactor)
 }
 
 function getSimpleTenseQuery(tense, pronounType, infinitive) {
-    const column = tense + "_" + pronounType;
+  const column = tense + '_' + pronounType;
 
-    return `SELECT ${column} 
+  return `SELECT ${column} 
             AS conjugation 
             FROM test 
             WHERE infinitive="${infinitive}"`;
 }
 
 function getComposedTenseQuery(auxilliaryTense, pronounType, infinitive) {
-    return (
-        `SELECT CONCAT(
+  return `SELECT CONCAT(
             (
                 SELECT ${auxilliaryTense + '_' + pronounType}  
                 FROM test 
@@ -227,8 +247,7 @@ function getComposedTenseQuery(auxilliaryTense, pronounType, infinitive) {
             ), " ", past_participle) 
         AS conjugation
         FROM test 
-        WHERE infinitive="${infinitive}";`
-    );
+        WHERE infinitive="${infinitive}";`;
 }
 
 app.listen(port, () => console.log(`listening on port ${port}`));

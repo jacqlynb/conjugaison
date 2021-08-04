@@ -1,1 +1,1 @@
-export {CustomPieChart} from './CustomPieChart';
+export { CustomPieChart } from './CustomPieChart';
