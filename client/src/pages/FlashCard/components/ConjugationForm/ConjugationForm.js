@@ -26,7 +26,7 @@ export function ConjugationForm({
           'conjugation-input--incorrect': correct != null && !correct,
         })}
       />
-      <input className="conjugation-submit" type="submit" value="Check" />
+      <input className="conjugation-submit" type="submit" value="vérifiez" />
     </form>
   );
 }

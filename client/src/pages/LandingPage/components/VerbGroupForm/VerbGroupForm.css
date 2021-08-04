@@ -7,11 +7,13 @@
   display: inline-block;
 }
 
-.verb-group-radio {
+.verb-group-form__radio {
   align-self: flex-start;
   padding-top: 5px;
 }
 
-.verb-group-heading {
+.verb-group-form__heading {
+  font-family: 'Roboto Mono', serif;
+  font-size: 1.5em;
   margin: 30 10 10 10;
 }

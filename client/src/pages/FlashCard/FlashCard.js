@@ -70,8 +70,6 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
       setPromptIndex((previousIndex) => previousIndex + 1);
       setUserConjugation('');
     }, 1500);
-
-    console.log(promptIndex);
   }
 
   return done ? (

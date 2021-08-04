@@ -77,7 +77,6 @@ class App extends Component {
         <Router>
           <div>
             <Header />
-            <Description />
             <Switch>
               <Route exact path="/">
                 {this.state.wizardMode ? (
@@ -89,14 +88,17 @@ class App extends Component {
                     verbGroup={this.state.verbGroup}
                   />
                 ) : (
-                  <LandingPage
-                    onSelectTense={this.handleVerbTenseChange}
-                    selectedTenses={this.state.tenses}
-                    onSelectGroup={this.handleVerbGroupChange}
-                    onSelectNumPrompts={this.handleNumPromptsChange}
-                    verbGroup={this.state.verbGroup}
-                    numPrompts={this.state.numPrompts}
-                  />
+                  <>
+                    <Description />
+                    <LandingPage
+                      onSelectTense={this.handleVerbTenseChange}
+                      selectedTenses={this.state.tenses}
+                      onSelectGroup={this.handleVerbGroupChange}
+                      onSelectNumPrompts={this.handleNumPromptsChange}
+                      verbGroup={this.state.verbGroup}
+                      numPrompts={this.state.numPrompts}
+                    />
+                  </>
                 )}
               </Route>
               <Route path="/flashcard">

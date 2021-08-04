@@ -17,7 +17,7 @@ export function Summary() {
         summaryCorrect={getTotalCorrect(records)}
         summaryTotalConjugations={getTotalConjugations(records)}
       />
-      <CustomLink url="/" route="" linkStyle="button" text="Restart" />
+      <CustomLink url="/" route="" linkStyle="button" text="Recommencez" />
     </div>
   );
 }

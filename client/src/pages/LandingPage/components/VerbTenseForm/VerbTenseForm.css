@@ -1,13 +1,15 @@
 .verb-tense-form {
-    display: inline-flex;
-    flex-direction: column;
+  display: inline-flex;
+  flex-direction: column;
 }
 
 .verb-tense-form__heading {
-    margin: 30 10 10 10;
+  font-family: 'Roboto Mono', serif;
+  font-size: 1.5em;
+  margin: 30 10 10 10;
 }
 
 .verb-tense-form__input {
-    align-self: flex-start;
-    padding-top: 5px;
+  align-self: flex-start;
+  padding-top: 5px;
 }
