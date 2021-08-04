@@ -1,35 +1,19 @@
-import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
-import { ConjugationHistoryContext } from './utilities';
+import React, { Component, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ConjugationHistoryContext, useConjugationHistory } from './utilities';
 import { LandingPage, FlashCard, Summary, Wizard } from './pages';
 import { Header, Description } from './components';
 import './App.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.handleVerbTenseChange = this.handleVerbTenseChange.bind(this);
-    this.handleVerbGroupChange = this.handleVerbGroupChange.bind(this);
-    this.handleNumPromptsChange = this.handleNumPromptsChange.bind(this);
-    this.addRecord = this.addRecord.bind(this);
-  }
+export function App() {
+  const [conjugationHistory, setConjugationHistory] = useState([]);
+  const [wizardMode, setWizardMode] = useState(false);
+  const [tenses, setTenses] = useState(['indicatif présent']);
+  const [verbGroup, setVerbGroup] = useState('er');
+  const [numPrompts, setNumPrompts] = useState(10);
 
-  state = {
-    wizardMode: false,
-    tenses: ['indicatif présent'],
-    verbGroup: 'er',
-    currentTense: 'indicatif présent',
-    conjugationHistory: [],
-    numPrompts: 10,
-  };
-
-  handleVerbTenseChange(event) {
-    const tenses = [...this.state.tenses];
+  function handleVerbTenseChange(event) {
+    const tenses = [...tenses];
 
     // ensure that at least one input remains selected at all times
     if (tenses.includes(event.target.value) && tenses.length !== 1) {
@@ -38,15 +22,15 @@ class App extends Component {
       tenses.push(event.target.value);
     }
 
-    this.setState({ tenses });
+    setTenses(tenses);
   }
 
-  handleVerbGroupChange(event) {
-    this.setState({ verbGroup: event.target.value });
+  function handleVerbGroupChange(event) {
+    setVerbGroup(event.target.value);
   }
 
-  handleNumPromptsChange(event) {
-    const prevNumPrompts = this.state.numPrompts;
+  function handleNumPromptsChange(event) {
+    const prevNumPrompts = numPrompts;
     let newNumPrompts;
 
     if (event.target.value === '') {
@@ -57,67 +41,67 @@ class App extends Component {
         : parseInt(event.target.value);
     }
 
-    this.setState({ numPrompts: newNumPrompts });
+    setNumPrompts(newNumPrompts);
   }
 
-  addRecord(record) {
-    this.setState({
-      conjugationHistory: [...this.state.conjugationHistory, record],
-    });
+  function addRecord(record) {
+    setConjugationHistory([...conjugationHistory, record]);
   }
 
-  render() {
-    return (
-      <ConjugationHistoryContext.Provider
-        value={{
-          records: this.state.conjugationHistory,
-          addRecord: this.addRecord,
-        }}
-      >
-        <Router>
-          <div>
-            <Header />
-            <Switch>
-              <Route exact path="/">
-                {this.state.wizardMode ? (
-                  <Wizard
-                    onSelectTense={this.handleVerbTenseChange}
-                    selectedTenses={this.state.tenses}
-                    onSelectGroup={this.handleVerbGroupChange}
-                    onSelectNumPrompts={this.handleNumPromptsChange}
-                    verbGroup={this.state.verbGroup}
-                  />
-                ) : (
-                  <>
-                    <Description />
-                    <LandingPage
-                      onSelectTense={this.handleVerbTenseChange}
-                      selectedTenses={this.state.tenses}
-                      onSelectGroup={this.handleVerbGroupChange}
-                      onSelectNumPrompts={this.handleNumPromptsChange}
-                      verbGroup={this.state.verbGroup}
-                      numPrompts={this.state.numPrompts}
-                    />
-                  </>
-                )}
-              </Route>
-              <Route path="/flashcard">
-                <FlashCard
-                  infinitive={this.state.infinitive}
-                  tenses={this.state.tenses}
-                  verbGroup={this.state.verbGroup}
-                  numPrompts={this.state.numPrompts}
+  function clearRecords() {
+    setConjugationHistory([]);
+  }
+
+  return (
+    <ConjugationHistoryContext.Provider
+      value={{
+        records: conjugationHistory,
+        addRecord,
+        clearRecords,
+      }}
+    >
+      <Router>
+        <div>
+          <Header />
+          <Switch>
+            <Route exact path="/">
+              {wizardMode ? (
+                <Wizard
+                  onSelectTense={handleVerbTenseChange}
+                  selectedTenses={tenses}
+                  onSelectGroup={handleVerbGroupChange}
+                  onSelectNumPrompts={handleNumPromptsChange}
+                  verbGroup={verbGroup}
                 />
-              </Route>
-              <Route path="/summary">
-                <Summary setSummaryInfo={this.setSummaryInfo} />
-              </Route>
-            </Switch>
-          </div>
-        </Router>
-      </ConjugationHistoryContext.Provider>
-    );
-  }
+              ) : (
+                <>
+                  <Description />
+                  <LandingPage
+                    onSelectTense={handleVerbTenseChange}
+                    selectedTenses={tenses}
+                    onSelectGroup={handleVerbGroupChange}
+                    onSelectNumPrompts={handleNumPromptsChange}
+                    verbGroup={verbGroup}
+                    numPrompts={numPrompts}
+                  />
+                </>
+              )}
+            </Route>
+            <Route path="/flashcard">
+              <FlashCard
+                tenses={tenses}
+                verbGroup={verbGroup}
+                numPrompts={numPrompts}
+              />
+            </Route>
+            <Route path="/summary">
+              <Summary />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </ConjugationHistoryContext.Provider>
+  );
 }
 
 export default App;
