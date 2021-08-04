@@ -82,9 +82,7 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
           onChange={handleChange}
           onSubmit={submit}
           correct={correct}
-          pronoun={
-            pronoun === 'je' && startsWithVowel(infinitive) ? "j'" : pronoun
-          }
+          pronoun={pronoun === 'je' ? getFirstPerson(userConjugation) : pronoun}
           tense={tense}
           userConjugation={userConjugation}
         />
@@ -155,6 +153,6 @@ function buildUrl(path, params) {
   return url;
 }
 
-function startsWithVowel(infinitive) {
-  return /^[a|e|i|o|u]/.test(infinitive);
+function getFirstPerson(userConjugation) {
+  return /^[a|e|h|i|o|u]/.test(userConjugation) ? "j'" : 'je';
 }
