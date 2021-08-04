@@ -13,16 +13,19 @@ export function App() {
   const [numPrompts, setNumPrompts] = useState(10);
 
   function handleVerbTenseChange(event) {
-    const tenses = [...tenses];
+    const currentTenses = [...tenses];
 
     // ensure that at least one input remains selected at all times
-    if (tenses.includes(event.target.value) && tenses.length !== 1) {
-      tenses.splice(tenses.indexOf(event.target.value), 1);
-    } else if (!tenses.includes(event.target.value)) {
-      tenses.push(event.target.value);
+    if (
+      currentTenses.includes(event.target.value) &&
+      currentTenses.length !== 1
+    ) {
+      currentTenses.splice(currentTenses.indexOf(event.target.value), 1);
+    } else if (!currentTenses.includes(event.target.value)) {
+      currentTenses.push(event.target.value);
     }
 
-    setTenses(tenses);
+    setTenses(currentTenses);
   }
 
   function handleVerbGroupChange(event) {
