@@ -4,7 +4,8 @@ import './Description.css';
 export function Description(props) {
   return (
     <p className="landing-page-description">
-      An app for practicing French verb conjugations
+      Practice French verb conjugation // Pratiquez la conjugaison des verbes
+      français
     </p>
   );
 }

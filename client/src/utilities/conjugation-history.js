@@ -26,7 +26,6 @@ export function getTotalConjugations(records) {
 }
 
 export function getCorrectResponse(records) {
-  console.log('history', records);
   if (records.length === 0) {
     return null;
   }

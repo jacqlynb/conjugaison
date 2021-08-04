@@ -1,4 +1,3 @@
-
 .conjugation-label {
   margin-right: 7px;
 }
@@ -8,17 +7,16 @@
   display: inline-block;
 }
 
-.conjugation-form > input {
-  margin: 2px;
-}
-
 .conjugation-input {
   outline: none;
+  -webkit-appearance: none;
+  font-size: 1em;
   width: 150px;
   border-top: none;
   border-left: none;
   border-right: none;
   padding-bottom: 5px;
+  margin: 10px 4px 2px 2px;
 }
 
 .conjugation-input--pending {
@@ -32,7 +30,7 @@
 .conjugation-input--correct {
   border-bottom: 2px solid rgb(113, 241, 109);
 }
-  
+
 .conjugation-input--incorrect {
   border-bottom: 2px solid red;
 }
