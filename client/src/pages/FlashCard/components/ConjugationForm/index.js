@@ -1,1 +1,1 @@
-export {ConjugationForm} from './ConjugationForm';
+export { ConjugationForm } from './ConjugationForm';

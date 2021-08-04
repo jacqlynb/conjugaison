@@ -2,22 +2,30 @@ import React from 'react';
 import classNames from 'classnames';
 import './ConjugationForm.css';
 
-export function ConjugationForm(props) {
-
+export function ConjugationForm({
+  onSubmit,
+  onChange,
+  correct,
+  pronoun,
+  userConjugation,
+}) {
   return (
-    <form onSubmit={props.onSubmit} className="conjugation-form">
-      <label className="conjugation-label">{props.pronoun}</label>
+    <form onSubmit={onSubmit} className="conjugation-form">
+      <label className="conjugation-label" htmlFor="conjugation">
+        {pronoun}
+      </label>
       <input
         type="text"
         name="conjugation"
+        value={userConjugation}
+        onChange={onChange}
         className={classNames({
           'conjugation-input': true,
-          'conjugation-input--pending': props.correct == null,
-          'conjugation-input--correct': props.correct,
-          'conjugation-input--incorrect': props.correct != null && !props.correct,
+          'conjugation-input--pending': correct == null,
+          'conjugation-input--correct': correct,
+          'conjugation-input--incorrect': correct != null && !correct,
         })}
-        onChange={props.onChange}
-        value={props.value} />
+      />
       <input className="conjugation-submit" type="submit" value="Check" />
     </form>
   );
