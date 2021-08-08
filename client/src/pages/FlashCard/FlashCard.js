@@ -44,7 +44,7 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
   );
 
   function handleChange(event) {
-    setUserConjugation(event.target.value);
+    setUserConjugation(event.target.value.toLowerCase());
   }
 
   async function submit(event) {
