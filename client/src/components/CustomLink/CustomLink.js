@@ -3,17 +3,16 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import './CustomLink.css';
 
-export function CustomLink(props) {
+export function CustomLink({ url, route, linkStyle, disabled, text }) {
   return (
     <Link
-      to={props.url + props.route}
+      to={disabled ? '' : url + route}
       className={classNames({
-        'custom-link-button': props.linkStyle === 'button',
-        'custom-link-button--disabled':
-          props.linkStyle === 'button' && props.disabled,
+        'custom-link-button': linkStyle === 'button',
+        'custom-link-button--disabled': linkStyle === 'button' && disabled,
       })}
     >
-      {props.text}
+      {text}
     </Link>
   );
 }

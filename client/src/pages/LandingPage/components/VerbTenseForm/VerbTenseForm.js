@@ -1,7 +1,7 @@
 import React from 'react';
 import './VerbTenseForm.css';
 
-export function VerbTenseForm(props) {
+export function VerbTenseForm({ selectedTenses, onSelectTense }) {
   const verbTenses = [
     'indicatif présent',
     'imparfait',
@@ -24,10 +24,10 @@ export function VerbTenseForm(props) {
           type="checkbox"
           id={tense}
           key={tense}
-          name={tense}
           value={tense}
-          onChange={props.onSelectTense}
-          checked={props.selectedTenses.includes(tense) ? true : false}
+          onChange={onSelectTense}
+          checked={selectedTenses.includes(tense)}
+          name={tense}
         />
         <label htmlFor={tense}>{tense}</label>
       </div>
