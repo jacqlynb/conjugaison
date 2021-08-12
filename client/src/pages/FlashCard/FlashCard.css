@@ -1,18 +1,28 @@
-.flashcard-container {
-    width: 50%;
-    margin: 0 auto;
-}
-
 .flashcard {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 0.5rem 1rem 0.75rem 1rem;
+  border: 1px solid black;
+  box-shadow: 0.75rem 0.75rem 0 rgba(0, 0, 0, 0.125);
+  /* transform: rotate3d(0, 1, 0, 0deg);
+  transition: transform 1s ease-in-out; */
 }
 
-.conjugation-input {
-    width: 150px;
+@media screen and (min-width: 401px) {
+  .flashcard {
+    padding: 1rem 2rem 1.5rem 2rem;
+  }
 }
-  
+
+/* .flashcard--flip {
+  transform: rotate3d(0, 1, 0, 180deg);
+} */
+
 .correct-response {
-  margin-top: 20px;
+  margin-top: 1.5rem;
   white-space: pre;
+  color: red;
 }

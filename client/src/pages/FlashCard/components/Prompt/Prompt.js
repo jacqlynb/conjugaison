@@ -1,13 +1,14 @@
 import React from 'react';
 import './Prompt.css';
 
-export function Prompt({ currentTense, infinitive }) {
+export function Prompt({ currentTense, infinitive, children }) {
   return (
     <div className="prompt">
-      <p className="current-tense">{currentTense}</p>
-      <span className="infinitive">
+      <div className="prompt__current-tense">{currentTense}</div>
+      {children}
+      <div className="prompt__infinitive">
         {infinitive == null ? <span>&nbsp;</span> : ` (${infinitive})`}
-      </span>
+      </div>
     </div>
   );
 }

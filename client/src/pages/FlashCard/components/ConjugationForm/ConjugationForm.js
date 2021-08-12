@@ -10,23 +10,24 @@ export function ConjugationForm({
   userConjugation,
 }) {
   return (
-    <form onSubmit={onSubmit} className="conjugation-form">
-      <label className="conjugation-label" htmlFor="conjugation">
+    <form onSubmit={onSubmit} className="conjugation__form">
+      <label className="conjugation__label" htmlFor="conjugation">
         {pronoun}
       </label>
       <input
         type="text"
+        onChange={onChange}
         name="conjugation"
         value={userConjugation}
-        onChange={onChange}
         className={classNames({
-          'conjugation-input': true,
-          'conjugation-input--pending': correct == null,
-          'conjugation-input--correct': correct,
-          'conjugation-input--incorrect': correct != null && !correct,
+          conjugation__input: true,
+          'conjugation__input--pending': correct == null,
+          'conjugation__input--correct': correct,
+          'conjugation__input--incorrect': correct != null && !correct,
         })}
+        autoComplete="off"
       />
-      <input className="conjugation-submit" type="submit" value="vérifiez" />
+      <input className="conjugation__submit" type="submit" value="vérifiez" />
     </form>
   );
 }

@@ -75,25 +75,28 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
   return done ? (
     <Redirect to="/summary/" />
   ) : (
-    <div className="flashcard-container">
+    <>
       <div className="flashcard">
-        <Prompt currentTense={tense} infinitive={infinitive} />
-        <ConjugationForm
-          onChange={handleChange}
-          onSubmit={submit}
-          correct={correct}
-          pronoun={pronoun === 'je' ? getFirstPerson(userConjugation) : pronoun}
-          tense={tense}
-          userConjugation={userConjugation}
-        />
-      </div>
-      <div className="correct-response">
-        {correct === false ? correctResponse : ' '}
+        <Prompt currentTense={tense} infinitive={infinitive}>
+          <ConjugationForm
+            onChange={handleChange}
+            onSubmit={submit}
+            correct={correct}
+            pronoun={
+              pronoun === 'je' ? getFirstPerson(userConjugation) : pronoun
+            }
+            tense={tense}
+            userConjugation={userConjugation}
+          />
+        </Prompt>
+        <div className="correct-response">
+          {correct === false ? correctResponse : ' '}
+        </div>
       </div>
       <p>
         {getTotalCorrect(records)}/{getTotalConjugations(records)}
       </p>
-    </div>
+    </>
   );
 }
 

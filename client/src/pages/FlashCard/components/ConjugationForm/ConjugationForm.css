@@ -1,37 +1,47 @@
-.conjugation-label {
-  margin-right: 7px;
-}
-
-.conjugation-form {
-  margin: 0 auto;
+.conjugation__label {
   display: inline-block;
+  text-align: right;
+  width: 2.5rem;
 }
 
-.conjugation-input {
+.conjugation__input {
   outline: none;
-  -webkit-appearance: none;
-  -webkit-border-radius: 0px;
-  font-size: 1em;
-  width: 150px;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  padding-bottom: 5px;
-  margin: 10px 4px 2px 2px;
-}
-
-.conjugation-input--pending {
+  border-radius: 0;
+  border: none;
   border-bottom: 1px solid black;
+  font-size: 1rem;
+  width: 7rem;
+  padding-bottom: 0.25rem;
+  margin: 0 0.5rem;
 }
 
-.conjugation-input--pending:focus {
-  border-bottom: 2px solid black;
+@media screen and (min-width: 400px) {
+  .conjugation__input {
+    width: 10rem;
+    margin: 0.25rem 0.5rem 0.25rem 0.5rem;
+  }
 }
 
-.conjugation-input--correct {
-  border-bottom: 2px solid rgb(113, 241, 109);
+.conjugation__input--pending:focus {
+  border-width: 2px;
 }
 
-.conjugation-input--incorrect {
-  border-bottom: 2px solid red;
+.conjugation__input--correct {
+  border-width: 2px;
+  border-color: rgb(113, 241, 109);
+}
+
+.conjugation__input--incorrect {
+  border-width: 2px;
+  border-color: red;
+}
+
+.conjugation__submit {
+  background-color: rgb(119, 119, 119);
+  border-color: rgb(119, 119, 119);
+  font-size: 1rem;
+  color: white;
+  padding: 0.3rem;
+  border-radius: 0.2rem;
+  box-shadow: none;
 }
