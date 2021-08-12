@@ -3,6 +3,8 @@ import './Header.css';
 
 export function Header(props) {
   return (
-    <h1>Conjugaison</h1>
+    <header>
+      <h1>Conjugaison</h1>
+    </header>
   );
 }

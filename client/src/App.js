@@ -1,6 +1,6 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ConjugationHistoryContext, useConjugationHistory } from './utilities';
+import { ConjugationHistoryContext } from './utilities';
 import { LandingPage, FlashCard, Summary, Wizard } from './pages';
 import { Header, Description } from './components';
 import './App.css';
@@ -63,9 +63,9 @@ export function App() {
         clearRecords,
       }}
     >
-      <Router>
-        <div>
-          <Header />
+      <Header />
+      <main>
+        <Router>
           <Switch>
             <Route exact path="/">
               {wizardMode ? (
@@ -101,8 +101,8 @@ export function App() {
               <Summary />
             </Route>
           </Switch>
-        </div>
-      </Router>
+        </Router>
+      </main>
     </ConjugationHistoryContext.Provider>
   );
 }
