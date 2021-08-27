@@ -8,6 +8,7 @@ export function ConjugationForm({
   correct,
   pronoun,
   userConjugation,
+  disabled,
 }) {
   return (
     <form onSubmit={onSubmit} className="conjugation__form">
@@ -27,7 +28,12 @@ export function ConjugationForm({
         })}
         autoComplete="off"
       />
-      <input className="conjugation__submit" type="submit" value="vérifiez" />
+      <input
+        className="conjugation__submit"
+        type="submit"
+        value="vérifiez"
+        disabled={disabled}
+      />
     </form>
   );
 }

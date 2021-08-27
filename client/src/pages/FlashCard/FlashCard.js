@@ -14,6 +14,7 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
   const [pronoun, setPronoun] = useState(null);
   const [tense, setTense] = useState(null);
   const [userConjugation, setUserConjugation] = useState('');
+  const [disabled, setDisabled] = useState(false);
   const [correct, setCorrect] = useState(null);
   const [promptIndex, setPromptIndex] = useState(0);
   const [done, setDone] = useState(false);
@@ -48,12 +49,17 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
 
   async function submit(event) {
     event.preventDefault();
+
+    if (disabled) {
+      return;
+    }
+    setDisabled(true);
+
     const correctConjugation = await fetchCorrectConjugation(
       tense,
       pronoun,
       infinitive
     );
-
     setCorrect(userConjugation === correctConjugation);
 
     addRecord({
@@ -68,6 +74,7 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
     setTimeout(() => {
       setPromptIndex((previousIndex) => previousIndex + 1);
       setUserConjugation('');
+      setDisabled(false);
     }, 1500);
   }
 
@@ -86,6 +93,7 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
             }
             tense={tense}
             userConjugation={userConjugation}
+            disabled={disabled}
           />
         </Prompt>
         <div className="correct-response">
