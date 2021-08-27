@@ -3,6 +3,7 @@ import {
   getTotalCorrect,
   getTotalConjugations,
   useConjugationHistory,
+  getBestStreak,
 } from '../../utilities';
 import { CustomPieChart } from './components';
 import { CustomLink } from '../../components';
@@ -17,6 +18,7 @@ export function Summary() {
         summaryCorrect={getTotalCorrect(records)}
         summaryTotalConjugations={getTotalConjugations(records)}
       />
+      <p>Best streak: {getBestStreak(records)}</p>
       <CustomLink url="/" route="" linkStyle="button" text="Recommencez" />
     </div>
   );

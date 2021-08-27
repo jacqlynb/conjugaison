@@ -3,8 +3,7 @@ import { Redirect } from 'react-router-dom';
 import {
   useConjugationHistory,
   getCorrectResponse,
-  getTotalCorrect,
-  getTotalConjugations,
+  getCurrentStreak,
 } from '../../utilities';
 import { Prompt, ConjugationForm } from './components';
 import './FlashCard.css';
@@ -93,9 +92,7 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
           {correct === false ? correctResponse : ' '}
         </div>
       </div>
-      <p>
-        {getTotalCorrect(records)}/{getTotalConjugations(records)}
-      </p>
+      <p>streak: {getCurrentStreak(records)}</p>
     </>
   );
 }
