@@ -80,6 +80,8 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
 
   return done ? (
     <Redirect to="/summary/" />
+  ) : !infinitive ? (
+    <h3>Oops, something went wrong with the server!</h3>
   ) : (
     <>
       <div className="flashcard">
