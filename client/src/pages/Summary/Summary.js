@@ -18,7 +18,7 @@ export function Summary() {
         summaryCorrect={getTotalCorrect(records)}
         summaryTotalConjugations={getTotalConjugations(records)}
       />
-      <p>Best streak: {getBestStreak(records)}</p>
+      <p>Meilleure série: {getBestStreak(records)}</p>
       <CustomLink url="/" route="" linkStyle="button" text="Recommencez" />
     </div>
   );

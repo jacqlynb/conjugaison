@@ -102,7 +102,7 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
           {correct === false ? correctResponse : ' '}
         </div>
       </div>
-      <p>streak: {getCurrentStreak(records)}</p>
+      <p>série: {getCurrentStreak(records)}</p>
     </>
   );
 }

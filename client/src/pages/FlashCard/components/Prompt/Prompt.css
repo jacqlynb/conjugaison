@@ -1,5 +1,9 @@
 .prompt__current-tense {
-  margin-bottom: 2rem;
+  background: rgb(73, 87, 165);
+  color: white;
+  font-family: 'Roboto Mono', serif;
+  padding: 0.7rem;
+  margin-bottom: 3rem;
 }
 
 .prompt__infinitive {
