@@ -25,6 +25,22 @@ app.get('/api/verb', (req, res) => {
   });
 });
 
+app.get('/api/:verb', (req, res) => {
+  const { verb } = req.params;
+  connection.query(
+    `SELECT infinitive 
+      FROM test 
+      WHERE infinitive 
+      COLLATE utf8_general_ci=${connection.escape(verb)}`,
+    (error, results) => {
+      if (error || results.length === 0) {
+        res.status(404).send;
+      }
+      res.json(results[0]);
+    }
+  );
+});
+
 app.get('/api/conjugation', (req, res) => {
   const { tense, pronoun, infinitive } = req.query;
   const q = buildConjugationQuery(tense, pronoun, infinitive);
