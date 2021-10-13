@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ConjugationHistoryContext } from './utilities';
+import { ConjugationHistoryContext, storage } from './utilities';
 import { LandingPage, FlashCard, Summary, Wizard } from './pages';
 import { Header, Description } from './components';
 import './App.css';
 
 export function App() {
-  const [conjugationHistory, setConjugationHistory] = useState([]);
   const [wizardMode, setWizardMode] = useState(false);
-  const [tenses, setTenses] = useState(['indicatif présent']);
-  const [verbGroup, setVerbGroup] = useState('er');
-  const [numPrompts, setNumPrompts] = useState(10);
+  const [conjugationHistory, setConjugationHistory] = useState(
+    storage.getItem('conjugationHistory') ?? []
+  );
+  const [tenses, setTenses] = useState(
+    storage.getItem('tenses') ?? ['indicatif présent']
+  );
+  const [verbGroup, setVerbGroup] = useState(
+    storage.getItem('verbGroup') ?? 'er'
+  );
+  const [numPrompts, setNumPrompts] = useState(
+    storage.getItem('numPrompts') ?? 0
+  );
+
+  useEffect(() => {
+    storage.setItem('conjugationHistory', conjugationHistory);
+  });
+
+  useEffect(() => {
+    storage.setItem('tenses', tenses);
+  }, [tenses]);
+
+  useEffect(() => {
+    storage.setItem('verbGroup', verbGroup);
+  }, [verbGroup]);
+
+  useEffect(() => {
+    storage.setItem('numPrompts', numPrompts);
+  }, [numPrompts]);
 
   function handleVerbTenseChange(event) {
     const currentTenses = [...tenses];
