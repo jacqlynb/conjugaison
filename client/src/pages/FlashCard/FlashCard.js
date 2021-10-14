@@ -36,7 +36,7 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
       .catch((error) => {
         console.log('Error fetching verb', error);
       });
-  }, [verbGroup, tenses, promptIndex]);
+  }, [verbGroup, tenses, promptIndex, numPrompts]);
 
   const correctResponse = useMemo(
     () => getCorrectResponse(records),

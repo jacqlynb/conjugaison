@@ -1,4 +1,4 @@
-import React, { createRef, useContext } from 'react';
+import React, { useContext } from 'react';
 
 export const ConjugationHistoryContext = React.createContext({
   records: [],

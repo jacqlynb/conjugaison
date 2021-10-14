@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import {
   VerbTenseForm,
@@ -13,10 +13,12 @@ export function LandingPage({
   onSelectTense,
   selectedTenses,
   onSelectGroup,
+  handleCustomVerbChange,
   verbGroup,
   onSelectNumPrompts,
   numPrompts,
 }) {
+  const focused = useRef(false);
   const { url } = useRouteMatch();
   const history = useHistory();
   const { clearRecords } = useConjugationHistory();
@@ -35,9 +37,17 @@ export function LandingPage({
   }, []);
 
   function handleKeyDown({ key }) {
-    if (key === 'Enter') {
+    if (key === 'Enter' && !focused.current) {
       history.push('/flashcard');
     }
+  }
+
+  function handleCustomVerbFocus() {
+    focused.current = !focused.current;
+  }
+
+  function handleCustomVerbBlur() {
+    focused.current = !focused.current;
   }
 
   return (
@@ -46,7 +56,14 @@ export function LandingPage({
         onSelectTense={onSelectTense}
         selectedTenses={selectedTenses}
       />
-      <VerbGroupForm onSelectGroup={onSelectGroup} verbGroup={verbGroup} />
+      <VerbGroupForm
+        onSelectGroup={onSelectGroup}
+        verbGroup={verbGroup}
+        handleChange={handleCustomVerbChange}
+        handleFocus={handleCustomVerbFocus}
+        handleBlur={handleCustomVerbBlur}
+        focused={focused.current}
+      />
       <NumberOfPromptsForm
         onSelectNumPrompts={onSelectNumPrompts}
         numPrompts={numPrompts}

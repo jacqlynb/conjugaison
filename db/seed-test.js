@@ -1,13 +1,6 @@
 const fs = require('fs');
-const mysql = require('mysql');
 const thirdGroupVerbs = require('../api/irregularIRVerbs.js');
-
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password',
-  database: 'french',
-});
+const { connection } = require('../api/connection.js');
 
 connection.query('SELECT * FROM test', (error, results) => {
   if (results == null) {

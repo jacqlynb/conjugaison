@@ -56,6 +56,10 @@ export function App() {
     setVerbGroup(event.target.value);
   }
 
+  function handleCustomVerbChange(event) {
+    event.preventDefault();
+  }
+
   function handleNumPromptsChange(event) {
     const prevNumPrompts = numPrompts;
     let newNumPrompts;
@@ -107,6 +111,7 @@ export function App() {
                     onSelectTense={handleVerbTenseChange}
                     selectedTenses={tenses}
                     onSelectGroup={handleVerbGroupChange}
+                    handleCustomVerbChange={handleCustomVerbChange}
                     onSelectNumPrompts={handleNumPromptsChange}
                     verbGroup={verbGroup}
                     numPrompts={numPrompts}
