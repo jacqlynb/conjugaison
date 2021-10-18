@@ -18,15 +18,27 @@ const connection = mysql.createConnection({
 
 app.get('/api/verb', (req, res) => {
   const { group } = req.query;
-  const q = getRandomVerbQuery(group);
-  connection.query(q, (error, results) => {
-    if (error) throw error;
-    res.json(results[0]);
-  });
+
+  try {
+    const query = getRandomVerbQuery(group);
+
+    connection.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send(error);
+      }
+      res.json(results[0]);
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(400).send(error.message);
+  }
 });
 
-app.get('/api/:verb', (req, res) => {
+app.get('/api/verbs/:verb', (req, res) => {
   const { verb } = req.params;
+
   connection.query(
     `SELECT infinitive 
       FROM test 
@@ -43,11 +55,19 @@ app.get('/api/:verb', (req, res) => {
 
 app.get('/api/conjugation', (req, res) => {
   const { tense, pronoun, infinitive } = req.query;
-  const q = buildConjugationQuery(tense, pronoun, infinitive);
-  connection.query(q, (error, results) => {
-    if (error) throw error;
-    res.json(results[0]);
-  });
+
+  try {
+    const query = buildConjugationQuery(tense, pronoun, infinitive);
+
+    connection.query(query, (error, results) => {
+      if (error) {
+        res.status(500).send(error.message);
+      }
+      res.json(results[0]);
+    });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 });
 
 function getRandomVerbQuery(group) {
@@ -56,11 +76,16 @@ function getRandomVerbQuery(group) {
   return `SELECT infinitive 
             FROM test 
             WHERE verb_group="${verbGroup}"
+            AND freq_index > 25
             ORDER BY RAND()
             LIMIT 1`;
 }
 
 function getVerbGroup(group) {
+  if (group === '' || group == null) {
+    throw new Error('Missing verb group');
+  }
+
   const allowedGroups = [
     'er',
     'ir',
@@ -70,7 +95,7 @@ function getVerbGroup(group) {
   ];
 
   if (!allowedGroups.includes(group)) {
-    throw new Error('Bad group');
+    throw new Error('Invalid verb group');
   }
 
   return group;
@@ -141,7 +166,7 @@ function buildConjugationQuery(tense, pronoun, infinitive) {
     case 'impératif':
       return getSimpleTenseQuery('imperative', pronounType, infinitive);
     default:
-      throw new Error('invalid tense');
+      throw new Error('Invalid verb tense');
   }
 }
 
@@ -164,7 +189,7 @@ function getPronounType(pronoun) {
     case 'ils':
       return 'tpp';
     default:
-      throw new Error('invalid pronoun');
+      throw new Error('Invalid pronoun');
   }
 }
 
@@ -174,7 +199,7 @@ function getSimpleTenseQuery(tense, pronounType, infinitive) {
   return `SELECT ${column} 
             AS conjugation 
             FROM test 
-            WHERE infinitive="${infinitive}"`;
+            WHERE infinitive=${connection.escape(infinitive)}`;
 }
 
 function getComposedTenseQuery(auxilliaryTense, pronounType, infinitive) {
@@ -185,12 +210,12 @@ function getComposedTenseQuery(auxilliaryTense, pronounType, infinitive) {
                 WHERE infinitive=(
                     SELECT SUBSTRING_INDEX(compound_verb, ';', 1) 
                     FROM test 
-                    WHERE infinitive="${infinitive}"
+                    WHERE infinitive=${connection.escape(infinitive)}
                 )
             ), " ", past_participle) 
         AS conjugation
         FROM test 
-        WHERE infinitive="${infinitive}";`;
+        WHERE infinitive=${connection.escape(infinitive)};`;
 }
 
 app.listen(port, () => console.log(`listening on port ${port}`));
