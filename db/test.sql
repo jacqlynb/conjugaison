@@ -1,6 +1,6 @@
 CREATE TABLE test (
     verb_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    infinitive VARCHAR(100) NOT NULL COLLATE utf8_bin,
+    infinitive VARCHAR(100) NOT NULL UNIQUE COLLATE utf8_bin,
     gerund VARCHAR(100) COLLATE utf8_bin,
     present_participle VARCHAR(100) COLLATE utf8_bin,
     past_participle VARCHAR(100) COLLATE utf8_bin,
