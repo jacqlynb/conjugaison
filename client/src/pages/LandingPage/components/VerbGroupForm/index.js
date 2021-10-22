@@ -1,1 +1,1 @@
-export {VerbGroupForm} from './VerbGroupForm';
+export { VerbGroupForm } from './VerbGroupForm';

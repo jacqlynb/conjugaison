@@ -7,14 +7,15 @@ import './App.css';
 
 export function App() {
   const [wizardMode, setWizardMode] = useState(false);
-  const [conjugationHistory, setConjugationHistory] = useState(
-    storage.getItem('conjugationHistory') ?? []
-  );
+  const [conjugationHistory, setConjugationHistory] = useState([]);
   const [tenses, setTenses] = useState(
     storage.getItem('tenses') ?? ['indicatif présent']
   );
   const [verbGroup, setVerbGroup] = useState(
     storage.getItem('verbGroup') ?? 'er'
+  );
+  const [customVerbs, setCustomVerbs] = useState(
+    storage.getItem('customVerbs') ?? []
   );
   const [numPrompts, setNumPrompts] = useState(
     storage.getItem('numPrompts') ?? 0
@@ -31,6 +32,10 @@ export function App() {
   useEffect(() => {
     storage.setItem('verbGroup', verbGroup);
   }, [verbGroup]);
+
+  useEffect(() => {
+    storage.setItem('customVerbs', customVerbs);
+  }, [customVerbs]);
 
   useEffect(() => {
     storage.setItem('numPrompts', numPrompts);
@@ -56,8 +61,26 @@ export function App() {
     setVerbGroup(event.target.value);
   }
 
-  function handleCustomVerbChange(event) {
-    event.preventDefault();
+  function handleCustomVerbChange(verb) {
+    const prevCustomVerbs = [...customVerbs];
+    prevCustomVerbs.push(verb);
+    setCustomVerbs(prevCustomVerbs);
+  }
+
+  function removeCustomVerbs() {
+    setCustomVerbs([]);
+  }
+
+  function removeCustomVerb(verb) {
+    if (customVerbs.length === 0) {
+      return;
+    }
+    if (!customVerbs.includes(verb)) {
+      return;
+    }
+    let prevCustomVerbs = [...customVerbs];
+    prevCustomVerbs.splice(prevCustomVerbs.indexOf(verb), 1);
+    setCustomVerbs(prevCustomVerbs);
   }
 
   function handleNumPromptsChange(event) {
@@ -111,9 +134,12 @@ export function App() {
                     onSelectTense={handleVerbTenseChange}
                     selectedTenses={tenses}
                     onSelectGroup={handleVerbGroupChange}
-                    handleCustomVerbChange={handleCustomVerbChange}
-                    onSelectNumPrompts={handleNumPromptsChange}
                     verbGroup={verbGroup}
+                    customVerbs={customVerbs}
+                    handleCustomVerbChange={handleCustomVerbChange}
+                    removeCustomVerbs={removeCustomVerbs}
+                    removeCustomVerb={removeCustomVerb}
+                    onSelectNumPrompts={handleNumPromptsChange}
                     numPrompts={numPrompts}
                   />
                 </>

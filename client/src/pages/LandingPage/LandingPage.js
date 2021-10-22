@@ -13,8 +13,11 @@ export function LandingPage({
   onSelectTense,
   selectedTenses,
   onSelectGroup,
-  handleCustomVerbChange,
   verbGroup,
+  customVerbs,
+  removeCustomVerbs,
+  handleCustomVerbChange,
+  removeCustomVerb,
   onSelectNumPrompts,
   numPrompts,
 }) {
@@ -59,7 +62,10 @@ export function LandingPage({
       <VerbGroupForm
         onSelectGroup={onSelectGroup}
         verbGroup={verbGroup}
-        handleChange={handleCustomVerbChange}
+        customVerbs={customVerbs}
+        handleCustomVerbChange={handleCustomVerbChange}
+        removeCustomVerbs={removeCustomVerbs}
+        removeCustomVerb={removeCustomVerb}
         handleFocus={handleCustomVerbFocus}
         handleBlur={handleCustomVerbBlur}
         focused={focused.current}

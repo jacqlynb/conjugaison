@@ -1,11 +1,13 @@
 import React from 'react';
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
 import App from './App';
-import {VerbTenseForm, Prompt} from './components';
+import { VerbTenseForm } from './pages/LandingPage/components';
 
 it('indicatif présent is selected as default tense', () => {
-    const wrapper = mount(<App />);
-    expect(wrapper.find(VerbTenseForm)).toHaveProp('selectedTenses', ['indicatif présent']);
+  const wrapper = mount(<App />);
+  expect(wrapper.find(VerbTenseForm)).toHaveProp('selectedTenses', [
+    'indicatif présent',
+  ]);
 });
 
 // it('prompt updates when new verb tense input checked', async () => {
@@ -19,7 +21,7 @@ it('indicatif présent is selected as default tense', () => {
 
 //   // check first unchecked input
 //   firstUncheckedInput.simulate('change', {target: {value: firstUncheckedInput.props().value}});
-  
+
 //   // uncheck default checked input
 //   defaultCheckedInput.simulate('change', {target: {value: defaultCheckedInput.props().value}});
 
@@ -29,6 +31,6 @@ it('indicatif présent is selected as default tense', () => {
 //   expect(promptWrapper.text()).toContain(firstUncheckedInput.props().value);
 // });
 
-function resolvePromises() {
-  return new Promise(resolve => setImmediate(resolve));
-}
+// function resolvePromises() {
+//   return new Promise(resolve => setImmediate(resolve));
+// }

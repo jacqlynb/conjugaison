@@ -7,26 +7,10 @@
 .verb-group-form__heading {
   font-family: 'Roboto Mono', serif;
   font-size: 1.5em;
-  /* margin: 3rem 1rem 1rem 1rem; */
+  margin: 3rem 1rem 1rem 1rem;
 }
 
 .verb-group-form__radio {
   align-self: flex-start;
   padding-top: 0.4rem;
-}
-
-.verb-group-form__custom-list {
-  margin-top: 0.4rem;
-}
-
-.custom-verb-tags {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.custom-verb-tag {
-  background-color: lightgray;
-  margin: 0.5rem;
-  padding: 0.5rem;
 }

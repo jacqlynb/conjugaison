@@ -1,0 +1,27 @@
+.custom-verb__tag {
+  font-size: 0.8rem;
+  margin: 0.5rem;
+  padding: 0.2rem 0.2rem 0.2rem 0.5rem;
+  background-color: lightgray;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.custom-verb__add-btn {
+  margin: 0.3rem;
+}
+
+.custom-verb__tag > span {
+  padding-right: 0.3rem;
+}
+
+.custom-verb__rmv-btn {
+  font-size: 1rem;
+  font-weight: 100;
+  align-self: center;
+  background: none;
+  border: none;
+  color: rgb(39, 39, 131);
+  cursor: pointer;
+}

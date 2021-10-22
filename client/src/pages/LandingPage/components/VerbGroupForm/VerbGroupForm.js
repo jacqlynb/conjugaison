@@ -1,31 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { CustomVerbForm } from '../CustomVerbForm';
 import './VerbGroupForm.css';
 
 export function VerbGroupForm({
   verbGroup,
+  customVerbs,
+  removeCustomVerbs,
+  removeCustomVerb,
   onSelectGroup,
-  handleChange,
+  handleCustomVerbChange,
   handleFocus,
   handleBlur,
   focused,
 }) {
-  const [tags, setTags] = useState([]);
-  console.log(focused);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (verbGroup['custom-verb-list']) {
-      setTags(verbGroup['custom-verb-list']);
-    }
-  }, [verbGroup]);
-
   const verbGroups = [
     'er',
     'ir',
@@ -34,12 +21,6 @@ export function VerbGroupForm({
     'irregular-oir',
     'custom-verb-list',
   ];
-
-  function handleKeyDown({ key }) {
-    if (key === 'Enter' && focused === true) {
-      console.log('enter');
-    }
-  }
 
   const verbGroupMarkup = verbGroups.map((group) => {
     return (
@@ -63,27 +44,20 @@ export function VerbGroupForm({
     );
   });
 
-  const customVerbInput =
-    verbGroup === 'custom-verb-list' ? (
-      <input
-        type="text"
-        className="verb-group-form__custom-list"
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-      />
-    ) : null;
-
-  const tagMarkup = tags.map((tag) => {
-    return <span className="custom-verb-tag">{tag}x</span>;
-  });
-
   return (
     <div className="verb-group-form">
       <h4 className="verb-group-form__heading">Group:</h4>
       {verbGroupMarkup}
-      {customVerbInput}
-      <div className="custom-verb-tags">{tagMarkup}</div>
+      <CustomVerbForm
+        verbGroup={verbGroup}
+        customVerbs={customVerbs}
+        handleCustomVerbChange={handleCustomVerbChange}
+        removeCustomVerb={removeCustomVerb}
+        removeCustomVerbs={removeCustomVerbs}
+        handleFocus={handleFocus}
+        handleBlur={handleBlur}
+        focused={focused}
+      />
     </div>
   );
 }

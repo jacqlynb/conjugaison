@@ -1,0 +1,18 @@
+.custom-verb {
+  width: 360px;
+  text-align: center;
+}
+
+.custom-verb__input {
+  margin-top: 0.4rem;
+}
+
+.custom-verb__tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.custom-verb__rmv-all-btn {
+  padding: 0.5rem;
+}

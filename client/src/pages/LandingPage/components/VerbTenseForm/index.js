@@ -1,1 +1,1 @@
-export {VerbTenseForm} from './VerbTenseForm';
+export { VerbTenseForm } from './VerbTenseForm';
