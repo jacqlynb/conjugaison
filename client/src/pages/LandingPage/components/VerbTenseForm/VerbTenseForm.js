@@ -37,7 +37,7 @@ export function VerbTenseForm({ selectedTenses, onSelectTense }) {
   return (
     <div className="verb-tense-form">
       <h4 className="verb-tense-form__heading">Temps:</h4>
-      {verbTenseMarkup}
+      <div className="verb-tense-form__input-wrapper">{verbTenseMarkup}</div>
     </div>
   );
 }

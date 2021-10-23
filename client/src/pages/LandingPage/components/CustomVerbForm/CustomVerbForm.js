@@ -35,7 +35,7 @@ export function CustomVerbForm({
 
   const customVerbInput =
     verbGroup === 'custom-verb-list' ? (
-      <>
+      <div className="custom-verb__input-wrapper">
         <input
           type="text"
           className="custom-verb__input"
@@ -45,7 +45,7 @@ export function CustomVerbForm({
           onBlur={handleBlur}
         />
         <AddTag handleAddClick={handleAddClick}></AddTag>
-      </>
+      </div>
     ) : null;
 
   const removeAllVerbs =

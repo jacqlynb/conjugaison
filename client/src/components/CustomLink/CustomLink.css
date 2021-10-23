@@ -1,9 +1,11 @@
 .custom-link-button {
+  max-width: fit-content;
+  align-self: center;
   text-decoration: none;
   color: white;
+  padding: 0.6rem;
   border: 1px solid rgb(119, 119, 119);
   border-radius: 3px;
-  padding: 0.6rem;
   background-color: rgb(119, 119, 119);
 }
 

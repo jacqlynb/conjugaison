@@ -45,9 +45,11 @@ export function VerbGroupForm({
   });
 
   return (
-    <div className="verb-group-form">
-      <h4 className="verb-group-form__heading">Group:</h4>
-      {verbGroupMarkup}
+    <>
+      <div className="verb-group-form">
+        <h4 className="verb-group-form__heading">Group:</h4>
+        <div className="verb-group-form__radio-wrapper">{verbGroupMarkup}</div>
+      </div>
       <CustomVerbForm
         verbGroup={verbGroup}
         customVerbs={customVerbs}
@@ -58,6 +60,6 @@ export function VerbGroupForm({
         handleBlur={handleBlur}
         focused={focused}
       />
-    </div>
+    </>
   );
 }
