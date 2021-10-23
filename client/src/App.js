@@ -41,6 +41,10 @@ export function App() {
     storage.setItem('numPrompts', numPrompts);
   }, [numPrompts]);
 
+  useEffect(() => {
+    setWizardMode(wizardMode);
+  }, [wizardMode]);
+
   function handleVerbTenseChange(event) {
     const currentTenses = [...tenses];
 
@@ -149,6 +153,7 @@ export function App() {
               <FlashCard
                 tenses={tenses}
                 verbGroup={verbGroup}
+                customVerbs={customVerbs}
                 numPrompts={numPrompts}
               />
             </Route>

@@ -25,7 +25,7 @@ export function CustomVerbForm({
   }
 
   async function addCustomVerb(verb) {
-    const response = await fetch('/api/' + verb);
+    const response = await fetch('/api/verbs/' + verb);
     if (response.status !== 200) {
       return;
     }
@@ -64,7 +64,9 @@ export function CustomVerbForm({
       <>
         <div className="custom-verb__tags">
           {customVerbs.map((verb) => {
-            return <Tag verb={verb} onRemove={removeCustomVerb}></Tag>;
+            return (
+              <Tag verb={verb} key={verb} onRemove={removeCustomVerb}></Tag>
+            );
           })}
         </div>
         {removeAllVerbs}

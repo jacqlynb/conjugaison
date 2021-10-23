@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { CustomVerbForm } from '../CustomVerbForm';
 import './VerbGroupForm.css';
 

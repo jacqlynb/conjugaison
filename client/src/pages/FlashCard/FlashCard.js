@@ -8,7 +8,7 @@ import {
 import { Prompt, ConjugationForm } from './components';
 import './FlashCard.css';
 
-export function FlashCard({ tenses, verbGroup, numPrompts }) {
+export function FlashCard({ tenses, verbGroup, customVerbs, numPrompts }) {
   const { records, addRecord } = useConjugationHistory();
   const [infinitive, setInfinitive] = useState(null);
   const [pronoun, setPronoun] = useState(null);
@@ -19,29 +19,79 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
   const [promptIndex, setPromptIndex] = useState(0);
   const [done, setDone] = useState(false);
 
+  const pronouns = [
+    'je',
+    'tu',
+    ['il', 'elle'],
+    'nous',
+    'vous',
+    ['ils', 'elles'],
+  ];
+
   useEffect(() => {
     if (promptIndex === numPrompts) {
       setDone(true);
       return;
     }
 
-    fetchRandomVerb(verbGroup)
-      .then((verb) => {
-        setInfinitive(verb);
-        setPronoun(getRandomPronoun());
-        setPronoun(getRandomPronoun());
-        setTense(getRandomTense(tenses));
-        setCorrect(null);
-      })
-      .catch((error) => {
-        console.log('Error fetching verb', error);
-      });
+    setTense(getRandomTense(tenses));
+    setCorrect(null);
+
+    if (verbGroup === 'custom-verb-list') {
+      setInfinitive(fetchRandomCustomVerb());
+      setPronoun(getCustomVerbPronoun());
+    } else {
+      fetchRandomVerb(verbGroup)
+        .then((verb) => {
+          setInfinitive(verb);
+          setPronoun(getRandomPronoun());
+        })
+        .catch((error) => {
+          console.log('Error fetching verb', error);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [verbGroup, tenses, promptIndex, numPrompts]);
 
   const correctResponse = useMemo(
     () => getCorrectResponse(records),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [records.length]
   );
+
+  async function fetchRandomVerb(verbGroup) {
+    if (verbGroup === 'custom-verb-list') {
+      console.log('fetching random custom verb');
+      return fetchRandomCustomVerb();
+    }
+    const url = buildUrl('/verb', { group: verbGroup });
+
+    try {
+      const data = await fetch(url);
+      const { infinitive } = await data.json();
+      return infinitive;
+    } catch (error) {
+      console.log('error in callApi', error);
+    }
+  }
+
+  function fetchRandomCustomVerb() {
+    if (customVerbs.length === 0) {
+      return new Error('no custom verbs selected');
+    }
+    let numCycles = Math.floor(records.length / customVerbs.length);
+    let foundVerbNotPracticed = false;
+
+    while (!foundVerbNotPracticed) {
+      let verb = customVerbs[getRandomIndex(customVerbs.length)];
+      if (
+        records.filter((record) => record.infinitive === verb).length <=
+        numCycles
+      ) {
+        return verb;
+      }
+    }
+  }
 
   function handleChange(event) {
     setUserConjugation(event.target.value.toLowerCase());
@@ -78,6 +128,74 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
     }, 1500);
   }
 
+  async function fetchCorrectConjugation(tense, pronoun, infinitive) {
+    const url = buildUrl('/conjugation', { tense, pronoun, infinitive });
+
+    try {
+      const data = await fetch(url);
+      const { conjugation } = await data.json();
+      return conjugation;
+    } catch (error) {
+      console.log('error in callApi', error);
+    }
+  }
+
+  function getRandomIndex(length) {
+    return Math.floor(Math.random() * length);
+  }
+
+  function getCustomVerbPronoun() {
+    if (customVerbs.length === 0) {
+      return '';
+    }
+    let numCycles = Math.floor(
+      records.length / customVerbs.length / pronouns.length
+    );
+    let foundUnpracticedPronoun = false;
+
+    while (!foundUnpracticedPronoun) {
+      let pronoun = getRandomPronoun();
+
+      let cycle = records.reduce((acc, curr) => {
+        return curr.infinitive === infinitive && curr.pronoun === pronoun
+          ? acc + 1
+          : acc;
+      }, 0);
+
+      if (cycle <= numCycles) {
+        return pronoun;
+      }
+    }
+  }
+
+  function getRandomPronoun() {
+    const randomIndex = getRandomIndex(pronouns.length);
+
+    if (Array.isArray(pronouns[randomIndex])) {
+      const genderIndex = getRandomIndex(2);
+      return pronouns[randomIndex][genderIndex];
+    } else {
+      return pronouns[randomIndex];
+    }
+  }
+
+  function getRandomTense(tenses) {
+    return tenses[getRandomIndex(tenses.length)];
+  }
+
+  function buildUrl(path, params) {
+    const API_PREFIX = '/api';
+    const url = new URL(`${API_PREFIX}${path}`, window.location.origin);
+    Object.keys(params).forEach((key) =>
+      url.searchParams.append(key, params[key])
+    );
+    return url;
+  }
+
+  function getFirstPerson(userConjugation) {
+    return /^[a|e|h|i|o|u]/.test(userConjugation) ? "j'" : 'je';
+  }
+
   return done ? (
     <Redirect to="/summary/" />
   ) : !infinitive ? (
@@ -105,64 +223,4 @@ export function FlashCard({ tenses, verbGroup, numPrompts }) {
       <p>série: {getCurrentStreak(records)}</p>
     </>
   );
-}
-
-async function fetchRandomVerb(verbGroup) {
-  const url = buildUrl('/verb', { group: verbGroup });
-
-  try {
-    const data = await fetch(url);
-    const { infinitive } = await data.json();
-    return infinitive;
-  } catch (error) {
-    console.log('error in callApi', error);
-  }
-}
-
-async function fetchCorrectConjugation(tense, pronoun, infinitive) {
-  const url = buildUrl('/conjugation', { tense, pronoun, infinitive });
-
-  try {
-    const data = await fetch(url);
-    const { conjugation } = await data.json();
-    return conjugation;
-  } catch (error) {
-    console.log('error in callApi', error);
-  }
-}
-
-function getRandomPronoun() {
-  const pronouns = [
-    'je',
-    'tu',
-    ['il', 'elle'],
-    'nous',
-    'vous',
-    ['ils', 'elles'],
-  ];
-  const randomIndex = Math.floor(Math.random() * pronouns.length);
-
-  if (Array.isArray(pronouns[randomIndex])) {
-    const genderIndex = Math.floor(Math.random() * 2);
-    return pronouns[randomIndex][genderIndex];
-  } else {
-    return pronouns[randomIndex];
-  }
-}
-
-function getRandomTense(tenses) {
-  return tenses[Math.floor(Math.random() * tenses.length)];
-}
-
-function buildUrl(path, params) {
-  const API_PREFIX = '/api';
-  const url = new URL(`${API_PREFIX}${path}`, window.location.origin);
-  Object.keys(params).forEach((key) =>
-    url.searchParams.append(key, params[key])
-  );
-  return url;
-}
-
-function getFirstPerson(userConjugation) {
-  return /^[a|e|h|i|o|u]/.test(userConjugation) ? "j'" : 'je';
 }
