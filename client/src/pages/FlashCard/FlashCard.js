@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   useConjugationHistory,
@@ -19,6 +19,8 @@ export function FlashCard({ tenses, verbGroup, customVerbs, numPrompts }) {
   const [promptIndex, setPromptIndex] = useState(0);
   const [done, setDone] = useState(false);
 
+  const _isMounted = useRef(true);
+
   const pronouns = [
     'je',
     'tu',
@@ -29,11 +31,18 @@ export function FlashCard({ tenses, verbGroup, customVerbs, numPrompts }) {
   ];
 
   useEffect(() => {
+    return () => {
+      _isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     if (promptIndex === numPrompts) {
       setDone(true);
-      return;
     }
+  }, [promptIndex, numPrompts]);
 
+  useEffect(() => {
     setTense(getRandomTense(tenses));
     setCorrect(null);
 
@@ -43,15 +52,17 @@ export function FlashCard({ tenses, verbGroup, customVerbs, numPrompts }) {
     } else {
       fetchRandomVerb(verbGroup)
         .then((verb) => {
-          setInfinitive(verb);
-          setPronoun(getRandomPronoun());
+          if (_isMounted.current) {
+            setInfinitive(verb);
+            setPronoun(getRandomPronoun());
+          }
         })
         .catch((error) => {
           console.log('Error fetching verb', error);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [verbGroup, tenses, promptIndex, numPrompts]);
+  }, [verbGroup, tenses, promptIndex]);
 
   const correctResponse = useMemo(
     () => getCorrectResponse(records),
@@ -122,9 +133,11 @@ export function FlashCard({ tenses, verbGroup, customVerbs, numPrompts }) {
     });
 
     setTimeout(() => {
-      setPromptIndex((previousIndex) => previousIndex + 1);
-      setUserConjugation('');
-      setDisabled(false);
+      if (_isMounted.current) {
+        setUserConjugation('');
+        setDisabled(false);
+        setPromptIndex((previousIndex) => previousIndex + 1);
+      }
     }, 1500);
   }
 

@@ -29,6 +29,7 @@ export function LandingPage({
   // clear records any time landing page is reached
   useEffect(() => {
     clearRecords();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -37,13 +38,13 @@ export function LandingPage({
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
 
-  function handleKeyDown({ key }) {
-    if (key === 'Enter' && !focused.current) {
-      history.push('/flashcard');
+    function handleKeyDown({ key }) {
+      if (key === 'Enter' && !focused.current) {
+        history.push('/flashcard');
+      }
     }
-  }
+  }, [history]);
 
   function handleCustomVerbFocus() {
     focused.current = !focused.current;

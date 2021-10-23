@@ -23,7 +23,7 @@ export function App() {
 
   useEffect(() => {
     storage.setItem('conjugationHistory', conjugationHistory);
-  });
+  }, [conjugationHistory]);
 
   useEffect(() => {
     storage.setItem('tenses', tenses);
