@@ -1,0 +1,36 @@
+# orbs:
+#   node: circleci/node@4.7.0 # the node orb provides common node-related configuration
+version: 2.1 # using 2.1 provides access to orbs and other features
+
+jobs:
+  run_tests:
+    # environment:
+    #   - NODE_ENV: #TODO
+    docker:
+      - image: circleci/node:16
+    steps:
+      - checkout
+      - run:
+          name: log environment variables
+          command: |
+            pwd
+            echo $PROJECT_ENV_VAR
+
+      - run:
+          name: Install dependencies
+          command: |
+            cd api && yarn install --immutable
+            npm -v
+      - run:
+          name: Run unit tests
+          command: |
+            cd api && yarn && yarn test
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+
+workflows:
+  build_tests:
+    jobs:
+      - run_tests
