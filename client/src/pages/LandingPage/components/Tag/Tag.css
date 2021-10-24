@@ -8,11 +8,22 @@
   align-items: center;
 }
 
+.custom-verb__tag--flash {
+  font-size: 0.8rem;
+  margin: 0.5rem;
+  padding: 0.2rem 0.2rem 0.2rem 0.5rem;
+  background-color: darkgray;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .custom-verb__add-btn {
   margin-left: 0.4rem;
 }
 
-.custom-verb__tag > span {
+.custom-verb__tag > span,
+.custom-verb__tag--flash > span {
   padding-right: 0.3rem;
 }
 

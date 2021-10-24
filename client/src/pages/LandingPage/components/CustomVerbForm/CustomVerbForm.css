@@ -3,7 +3,7 @@
 }
 
 .custom-verb__input-wrapper {
-  margin: 2rem 0;
+  margin: 1rem 0;
   display: flex;
   justify-content: center;
   flex-direction: row;
@@ -11,6 +11,19 @@
 
 .custom-verb__input {
   margin-left: 0.8rem;
+}
+
+.custom-verb__input--incorrect,
+.custom-verb__input--incorrect:focus {
+  margin-left: 0.8rem;
+  outline: none;
+  border: 2px solid red;
+  border-radius: 3px;
+}
+
+.custom-verb__error-msg {
+  margin-top: 0;
+  color: red;
 }
 
 .custom-verb__tags {
